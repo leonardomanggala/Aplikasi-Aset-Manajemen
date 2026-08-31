@@ -1,0 +1,40 @@
+{
+  "project_id": "prismatic-upgrade-1nzsc",
+  "collections": [
+    {
+      "name": "assets",
+      "fields": [
+        { "name": "uraian", "type": "string" },
+        { "name": "qty", "type": "number" },
+        { "name": "satuan", "type": "string" },
+        { "name": "tanggalPerolehan", "type": "string" },
+        { "name": "hargaPembelian", "type": "number" },
+        { "name": "jenisAset", "type": "string" },
+        { "name": "tahun", "type": "number" },
+        { "name": "teritori", "type": "string" },
+        { "name": "peruntukan", "type": "string" },
+        { "name": "letakRuang", "type": "string" },
+        { "name": "noUrutSejenis", "type": "string" },
+        { "name": "kodeNamaBarang", "type": "string" },
+        { "name": "noSeriFinal", "type": "string" },
+        { "name": "umurManfaat", "type": "number" },
+        { "name": "nilaiResidu", "type": "number" },
+        { "name": "kondisiBarang", "type": "string" },
+        { "name": "bidang", "type": "string" },
+        { "name": "createdAt", "type": "string" },
+        { "name": "updatedAt", "type": "string" }
+      ]
+    },
+    {
+      "name": "users",
+      "fields": [
+        { "name": "name", "type": "string" },
+        { "name": "email", "type": "string" },
+        { "name": "role", "type": "string" },
+        { "name": "username", "type": "string" },
+        { "name": "password", "type": "string" },
+        { "name": "kategoriAkses", "type": "string" }
+      ]
+    }
+  ]
+}
