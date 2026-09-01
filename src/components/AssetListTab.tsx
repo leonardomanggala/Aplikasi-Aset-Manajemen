@@ -17,7 +17,9 @@ import {
   calculateStraightLineDepreciation,
   isAssetDepreciable,
   generateQrValue,
-  KondisiBarang
+  KondisiBarang,
+  getCanonicalRole,
+  ROLE_PERMISSIONS
 } from '../types';
 import { 
   Search, 
@@ -80,6 +82,9 @@ export default function AssetListTab({
   const pMap = peruntukanMap || PERUNTUKAN_MAP;
   const kMap = kodeNamaBarangMap || KODE_NAMA_BARANG_MAP;
   const bMap = bidangMap || {};
+  const canonicalRole = getCanonicalRole(currentUser.role);
+  const permissions = ROLE_PERMISSIONS[canonicalRole];
+  const canModify = permissions.assetsCreate || permissions.assetsUpdate || permissions.assetsDelete;
 
   // Filters state
   const [searchTerm, setSearchTerm] = useState('');
@@ -145,7 +150,7 @@ export default function AssetListTab({
 
   // Check user permission
   const checkPermission = (assetBidang: string | undefined) => {
-    if (currentUser.role === 'SUPER_ADMIN') return { permitted: true };
+    if (canonicalRole === 'SUPER_ADMIN' || canonicalRole === 'ADMIN') return { permitted: true };
     if (currentUser.role === 'KOORDINATOR_TIM') {
       const isPermitted = currentUser.kategoriAkses === assetBidang;
       return { 
@@ -155,7 +160,8 @@ export default function AssetListTab({
           : `Terkunci: Anda koordinator Bidang [${bMap[currentUser.kategoriAkses || ''] || currentUser.kategoriAkses}], tidak dapat merubah aset Bidang [${bMap[assetBidang || ''] || assetBidang || 'Kosong'}]` 
       };
     }
-    return { permitted: false, message: 'Terkunci: Petugas Viewer tidak memiliki hak mengubah data.' };
+    if (canonicalRole === 'OPERATOR') return { permitted: true };
+    return { permitted: false, message: 'Terkunci: Viewer tidak memiliki hak mengubah data.' };
   };
 
   // Auto-calculate Urut (Sequence Number)
@@ -450,6 +456,10 @@ export default function AssetListTab({
   };
 
   const handleDelete = (asset: Asset) => {
+    if (!permissions.assetsDelete) {
+      setPermissionErrorMsg('Terkunci: role Operator tidak memiliki hak menghapus aset.');
+      return;
+    }
     const perm = checkPermission(asset.bidang);
     if (!perm.permitted) {
       setPermissionErrorMsg(perm.message || 'Anda tidak diizinkan menghapus aset ini.');
@@ -492,7 +502,7 @@ export default function AssetListTab({
     
     selectedAssets.forEach(asset => {
       const perm = checkPermission(asset.bidang);
-      if (perm.permitted) {
+      if (permissions.assetsDelete && perm.permitted) {
         deletable.push(asset);
       } else {
         locked.push(asset);
@@ -702,7 +712,7 @@ export default function AssetListTab({
               <span>Ekspor CSV</span>
             </button>
 
-            {currentUser.role !== 'PETUGAS_VIEWER' ? (
+            {canModify ? (
               <button
                 onClick={handleOpenAddForm}
                 className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1.5 shadow-sm transition active:scale-95"
@@ -798,7 +808,7 @@ export default function AssetListTab({
                 {selectedAssetIds.length} UNIT DIPILIH
               </span>
               <span className="text-slate-400 font-medium">
-                {currentUser.role !== 'PETUGAS_VIEWER' 
+                {canModify
                   ? `Sistem label & penghapusan massal. ${bulkDeleteGroups.deletable.length} unit dapat dihapus.`
                   : `Cetak label QR massal untuk aset yang terpilih.`
                 }
@@ -822,7 +832,7 @@ export default function AssetListTab({
                 Cetak Label Massal ({selectedAssetIds.length})
               </button>
 
-              {currentUser.role !== 'PETUGAS_VIEWER' && (
+              {permissions.assetsDelete && (
                 <button
                   type="button"
                   onClick={() => {
@@ -1018,8 +1028,9 @@ export default function AssetListTab({
                             <Eye className="w-4 h-4" />
                           </button>
                           
-                          {currentUser.role !== 'PETUGAS_VIEWER' && (
+                          {canModify && (
                             <>
+                              {permissions.assetsUpdate && (
                               <button 
                                 onClick={() => handleOpenEditForm(asset)}
                                 title="Ubah data"
@@ -1027,6 +1038,8 @@ export default function AssetListTab({
                               >
                                 <Edit className="w-4 h-4" />
                               </button>
+                              )}
+                              {permissions.assetsDelete && (
                               <button 
                                 onClick={() => handleDelete(asset)}
                                 title="Hapus aset"
@@ -1034,6 +1047,7 @@ export default function AssetListTab({
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
+                              )}
                             </>
                           )}
                         </div>

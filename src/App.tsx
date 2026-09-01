@@ -22,6 +22,7 @@ import {
   PERUNTUKAN_MAP,
   KODE_NAMA_BARANG_MAP,
   BIDANG_MAP
+  ,getCanonicalRole, ROLE_PERMISSIONS, ROLE_LABELS
 } from './types';
 import {
   getAllAssetsFromFirebase,
@@ -206,6 +207,8 @@ export default function App() {
       password: parsed.password || defaultValue?.password || '123'
     };
   });
+  const canonicalRole = getCanonicalRole(currentUser.role);
+  const permissions = ROLE_PERMISSIONS[canonicalRole];
   const [users, setUsers] = useState<User[]>(() => {
     const cachedUsers = localStorage.getItem('sim_aset_registered_users');
     let rawUsers = INITIAL_USERS;
@@ -906,7 +909,7 @@ export default function App() {
             {!isSidebarCollapsed && <span>Scanner & QR Booth</span>}
           </button>
 
-          {currentUser.role === 'SUPER_ADMIN' && (
+          {permissions.import && (
           <button
             onClick={() => handleTabChange('import')}
             title="Unggah Lembar Kerja Excel"
@@ -921,7 +924,7 @@ export default function App() {
           </button>
           )}
 
-          {(currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'KOORDINATOR_TIM') && (
+          {permissions.master && (
           <button
             onClick={() => handleTabChange('master')}
             title="Konfigurasi Master Data"
@@ -952,7 +955,7 @@ export default function App() {
         </nav>
 
         {/* Sidebar Footer RBAC Operator Switcher */}
-        {!isSidebarCollapsed && currentUser.role === 'SUPER_ADMIN' && (
+        {!isSidebarCollapsed && permissions.users && (
           <div className="p-4 border-t border-slate-800/50 bg-slate-950">
             <div className="flex flex-col gap-2">
               <span className="text-[9px] text-slate-500 font-bold uppercase">Ganti Operator Sesi:</span>
@@ -963,7 +966,7 @@ export default function App() {
               >
                 {users.map(user => (
                   <option key={user.id} value={user.id} className="text-slate-300 bg-slate-900">
-                    {user.name} ({user.role === 'SUPER_ADMIN' ? 'SUPER' : user.role === 'KOORDINATOR_TIM' ? 'TIM' : 'VIEWER'})
+                    {user.name} ({ROLE_LABELS[getCanonicalRole(user.role)]})
                   </option>
                 ))}
               </select>
@@ -1013,7 +1016,7 @@ export default function App() {
 
             <span className="text-[10px] font-mono text-slate-450 uppercase">AKTIF: <strong className="text-slate-700 font-bold font-sans">{currentUser.name}</strong></span>
             
-            {currentUser.role === 'SUPER_ADMIN' ? (
+            {canonicalRole === 'SUPER_ADMIN' ? (
               <span className="bg-primary-50 text-primary-700 px-2.5 py-1 rounded text-[10px] uppercase font-bold border border-primary-100 flex items-center gap-1 shadow-sm font-mono">
                 <ShieldCheck className="w-3.5 h-3.5 text-primary-500" />
                 DITERAL ADMIN

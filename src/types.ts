@@ -4,7 +4,30 @@
  */
 
 export type KondisiBarang = 'BAIK' | 'RUSAK_RINGAN' | 'RUSAK_BERAT';
-export type Role = 'SUPER_ADMIN' | 'KOORDINATOR_TIM' | 'PETUGAS_VIEWER';
+export type Role = 'SUPER_ADMIN' | 'ADMIN' | 'OPERATOR' | 'VIEWER' | 'KOORDINATOR_TIM' | 'PETUGAS_VIEWER';
+export type CanonicalRole = 'SUPER_ADMIN' | 'ADMIN' | 'OPERATOR' | 'VIEWER';
+
+export const ROLE_LABELS: Record<CanonicalRole, string> = {
+  SUPER_ADMIN: 'Super Admin',
+  ADMIN: 'Admin',
+  OPERATOR: 'Operator',
+  VIEWER: 'Viewer'
+};
+
+// Legacy role names remain supported for existing Firebase/local data.
+export const getCanonicalRole = (role: Role | string): CanonicalRole => {
+  if (role === 'KOORDINATOR_TIM') return 'OPERATOR';
+  if (role === 'PETUGAS_VIEWER') return 'VIEWER';
+  if (role === 'ADMIN' || role === 'OPERATOR' || role === 'VIEWER' || role === 'SUPER_ADMIN') return role;
+  return 'VIEWER';
+};
+
+export const ROLE_PERMISSIONS: Record<CanonicalRole, { dashboard: boolean; assetsRead: boolean; assetsCreate: boolean; assetsUpdate: boolean; assetsDelete: boolean; qr: boolean; reports: boolean; import: boolean; master: boolean; users: boolean }> = {
+  SUPER_ADMIN: { dashboard: true, assetsRead: true, assetsCreate: true, assetsUpdate: true, assetsDelete: true, qr: true, reports: true, import: true, master: true, users: true },
+  ADMIN: { dashboard: true, assetsRead: true, assetsCreate: true, assetsUpdate: true, assetsDelete: true, qr: true, reports: true, import: true, master: true, users: false },
+  OPERATOR: { dashboard: true, assetsRead: true, assetsCreate: true, assetsUpdate: true, assetsDelete: false, qr: true, reports: true, import: false, master: false, users: false },
+  VIEWER: { dashboard: true, assetsRead: true, assetsCreate: false, assetsUpdate: false, assetsDelete: false, qr: true, reports: true, import: false, master: false, users: false }
+};
 
 export interface User {
   id: string;

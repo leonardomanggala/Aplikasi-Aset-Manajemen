@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useRef } from 'react';
-import { User, Asset, JENIS_ASET_MAP, LETAK_RUANG_MAP, TERITORI_MAP, PERUNTUKAN_MAP, KODE_NAMA_BARANG_MAP, generateNoSeriFinal } from '../types';
+import { User, Asset, JENIS_ASET_MAP, LETAK_RUANG_MAP, TERITORI_MAP, PERUNTUKAN_MAP, KODE_NAMA_BARANG_MAP, generateNoSeriFinal, getCanonicalRole } from '../types';
 import { syncAllAssetsToFirebase, updateMasterDataAtomic, syncMasterDataToFirebase } from '../firebaseUtils';
 import { 
   Database, 
@@ -111,7 +111,7 @@ export default function MasterDataTab({
   const [deleteRef, setDeleteRef] = useState<{ code: string; name: string } | null>(null);
   const [restoreConfirm, setRestoreConfirm] = useState(false);
 
-  const isReadOnly = currentUser.role !== 'SUPER_ADMIN';
+  const isReadOnly = !['SUPER_ADMIN', 'ADMIN'].includes(getCanonicalRole(currentUser.role));
 
   // Get current active map based on subtab
   const currentMap = (() => {

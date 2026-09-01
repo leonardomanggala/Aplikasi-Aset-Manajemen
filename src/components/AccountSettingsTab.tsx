@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { User, Role, Asset, JENIS_ASET_MAP, TERITORI_MAP, PERUNTUKAN_MAP, LETAK_RUANG_MAP, KODE_NAMA_BARANG_MAP } from '../types';
+import { User, Role, Asset, JENIS_ASET_MAP, TERITORI_MAP, PERUNTUKAN_MAP, LETAK_RUANG_MAP, KODE_NAMA_BARANG_MAP, getCanonicalRole, ROLE_LABELS } from '../types';
 import { 
   User as UserIcon, 
   Mail, 
@@ -52,6 +52,7 @@ export default function AccountSettingsTab({
   const [email, setEmail] = useState(currentUser.email);
   const [username, setUsername] = useState(currentUser.username || '');
   const [role, setRole] = useState<Role>(currentUser.role);
+  const canonicalRole = getCanonicalRole(currentUser.role);
   const [kategoriAkses, setKategoriAkses] = useState(currentUser.kategoriAkses || Object.keys(bidangMap)[0] || '');
   
   const [successMsg, setSuccessMsg] = useState('');
@@ -62,7 +63,7 @@ export default function AccountSettingsTab({
   const [newUserUsername, setNewUserUsername] = useState('');
   const [newUserPassword, setNewUserPassword] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
-  const [newUserRole, setNewUserRole] = useState<Role>('KOORDINATOR_TIM');
+  const [newUserRole, setNewUserRole] = useState<Role>('OPERATOR');
   const [newUserKategoriAkses, setNewUserKategoriAkses] = useState(Object.keys(bidangMap)[0] || '');
   const [userSuccessMsg, setUserSuccessMsg] = useState('');
   const [userErrorMsg, setUserErrorMsg] = useState('');
@@ -118,7 +119,7 @@ export default function AccountSettingsTab({
     setNewUserUsername('');
     setNewUserPassword('');
     setNewUserEmail('');
-    setNewUserRole('KOORDINATOR_TIM');
+    setNewUserRole('OPERATOR');
     setNewUserKategoriAkses(Object.keys(bidangMap)[0] || '');
     
     setUserSuccessMsg(`✓ Pengguna "${newUser.name}" berhasil didaftarkan sebagai operator paroki!`);
@@ -183,12 +184,14 @@ export default function AccountSettingsTab({
 
   // Describe actual RBAC clearance based on simulated role selection
   const getRoleBadgeClasses = (r: Role) => {
-    switch (r) {
+    switch (getCanonicalRole(r)) {
       case 'SUPER_ADMIN':
         return 'bg-primary-50 text-primary-800 border-primary-200';
-      case 'KOORDINATOR_TIM':
+      case 'ADMIN':
+        return 'bg-blue-50 text-blue-800 border-blue-200';
+      case 'OPERATOR':
         return 'bg-amber-50 text-amber-800 border-amber-200';
-      case 'PETUGAS_VIEWER':
+      case 'VIEWER':
         return 'bg-slate-100 text-slate-700 border-slate-300';
     }
   };
@@ -233,7 +236,7 @@ export default function AccountSettingsTab({
                 {initial}
               </div>
               <span className={`absolute bottom-0 right-0 border px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider shadow-sm ${getRoleBadgeClasses(currentUser.role)}`}>
-                {currentUser.role === 'SUPER_ADMIN' ? 'SUPER' : currentUser.role === 'KOORDINATOR_TIM' ? 'TIM' : 'VIEWER'}
+                {ROLE_LABELS[getCanonicalRole(currentUser.role)]}
               </span>
             </div>
 
@@ -247,34 +250,34 @@ export default function AccountSettingsTab({
               
               <div className="space-y-2 text-xs">
                 <div className="flex items-center gap-2">
-                  {currentUser.role !== 'PETUGAS_VIEWER' ? (
+                  {canonicalRole !== 'VIEWER' ? (
                     <span className="w-4.5 h-4.5 rounded-full bg-primary-50 text-primary-700 flex items-center justify-center font-bold text-[10px]">✓</span>
                   ) : (
                     <span className="w-4.5 h-4.5 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-[10px]">✕</span>
                   )}
-                  <span className={currentUser.role !== 'PETUGAS_VIEWER' ? 'text-slate-750 font-medium' : 'text-slate-400 line-through'}>
+                  <span className={canonicalRole !== 'VIEWER' ? 'text-slate-750 font-medium' : 'text-slate-400 line-through'}>
                     Registrasi/Simpan Aset Baru
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  {currentUser.role === 'SUPER_ADMIN' ? (
+                  {['SUPER_ADMIN', 'ADMIN'].includes(canonicalRole) ? (
                     <span className="w-4.5 h-4.5 rounded-full bg-primary-50 text-primary-700 flex items-center justify-center font-bold text-[10px]">✓</span>
                   ) : (
                     <span className="w-4.5 h-4.5 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-[10px]">✕</span>
                   )}
-                  <span className={currentUser.role === 'SUPER_ADMIN' ? 'text-slate-750 font-medium' : 'text-slate-400 line-through'}>
+                  <span className={['SUPER_ADMIN', 'ADMIN'].includes(canonicalRole) ? 'text-slate-750 font-medium' : 'text-slate-400 line-through'}>
                     Pengeditan Penuh Database Master Data
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  {currentUser.role === 'SUPER_ADMIN' ? (
+                  {['SUPER_ADMIN', 'ADMIN'].includes(canonicalRole) ? (
                     <span className="w-4.5 h-4.5 rounded-full bg-primary-50 text-primary-700 flex items-center justify-center font-bold text-[10px]">✓</span>
                   ) : (
                     <span className="w-4.5 h-4.5 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-[10px]">✕</span>
                   )}
-                  <span className={currentUser.role === 'SUPER_ADMIN' ? 'text-slate-750 font-medium' : 'text-slate-400 line-through'}>
+                  <span className={['SUPER_ADMIN', 'ADMIN'].includes(canonicalRole) ? 'text-slate-750 font-medium' : 'text-slate-400 line-through'}>
                     Penghapusan Aset Terdaftar
                   </span>
                 </div>
@@ -409,7 +412,7 @@ export default function AccountSettingsTab({
                   Ubah level ini untuk menguji hak akses (RBAC). Mode <strong>Petugas Viewer</strong> mengaktifkan readonly, <strong>Superman</strong> memberi kontrol penuh.
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 pt-2">
                   {/* Super Admin option */}
                   <label className={`border rounded-lg p-3 cursor-pointer flex flex-col gap-1.5 transition ${
                     role === 'SUPER_ADMIN' 
@@ -428,6 +431,28 @@ export default function AccountSettingsTab({
                       />
                     </div>
                     <span className="text-[10px] text-slate-450 leading-snug font-medium">Izin penulisan penuh database, pendaftaran baru, & master data.</span>
+                  </label>
+
+                  {/* Admin option */}
+                  <label className={`border rounded-lg p-3 cursor-pointer flex flex-col gap-1.5 transition ${
+                    role === 'ADMIN' ? 'border-primary-500 bg-primary-50/40 text-primary-800' : 'border-slate-200 text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  }`}>
+                    <div className="flex justify-between items-center w-full">
+                      <span className="font-bold text-[11px] uppercase tracking-wide">Admin</span>
+                      <input type="radio" name="auth-role" value="ADMIN" checked={role === 'ADMIN'} onChange={() => setRole('ADMIN')} className="text-primary-600 focus:ring-primary-500 w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-[10px] text-slate-450 leading-snug font-medium">Mengelola aset, master data, impor, dan laporan tanpa manajemen pengguna.</span>
+                  </label>
+
+                  {/* Operator option */}
+                  <label className={`border rounded-lg p-3 cursor-pointer flex flex-col gap-1.5 transition ${
+                    role === 'OPERATOR' ? 'border-primary-500 bg-primary-50/40 text-primary-800' : 'border-slate-200 text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  }`}>
+                    <div className="flex justify-between items-center w-full">
+                      <span className="font-bold text-[11px] uppercase tracking-wide">Operator</span>
+                      <input type="radio" name="auth-role" value="OPERATOR" checked={role === 'OPERATOR'} onChange={() => setRole('OPERATOR')} className="text-primary-600 focus:ring-primary-500 w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-[10px] text-slate-450 leading-snug font-medium">Menambah dan memperbarui aset, tanpa menghapus atau mengelola master data.</span>
                   </label>
 
                   {/* Koordinator Tim option */}
@@ -646,6 +671,7 @@ export default function AccountSettingsTab({
                     <tbody className="divide-y divide-slate-100 font-sans" id="operators-list-table">
                       {users.map(u => {
                         const isSelf = u.id === currentUser.id;
+                        const canonicalUserRole = getCanonicalRole(u.role);
                         
                         return (
                           <tr key={u.id} className={`hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition ${isSelf ? 'bg-primary-50/10' : ''}`}>
@@ -669,15 +695,20 @@ export default function AccountSettingsTab({
                             </td>
                             <td className="px-4 py-3 text-left">
                               <div className="space-y-1">
-                                {u.role === 'SUPER_ADMIN' ? (
+                                {canonicalUserRole === 'SUPER_ADMIN' ? (
                                   <span className="inline-flex items-center gap-1 bg-primary-50 border border-primary-200 text-primary-800 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider font-mono">
                                     <ShieldCheck className="w-3 h-3" />
                                     Super Admin
                                   </span>
-                                ) : u.role === 'KOORDINATOR_TIM' ? (
+                                ) : canonicalUserRole === 'ADMIN' ? (
+                                  <span className="inline-flex items-center gap-1 bg-blue-50 border border-blue-200 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider font-mono">
+                                    <Shield className="w-3 h-3" />
+                                    Admin
+                                  </span>
+                                ) : canonicalUserRole === 'OPERATOR' ? (
                                   <span className="inline-flex items-center gap-1 bg-amber-50 border border-amber-200 text-amber-800 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider font-mono">
                                     <Layers className="w-3 h-3" />
-                                    Koordinator
+                                    Operator
                                   </span>
                                 ) : (
                                   <span className="inline-flex items-center gap-1 bg-slate-50 border border-slate-200 text-slate-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider font-mono">
@@ -856,6 +887,18 @@ export default function AccountSettingsTab({
                           onChange={() => setNewUserRole('SUPER_ADMIN')}
                           className="text-primary-600 focus:ring-primary-500 w-3.5 h-3.5"
                         />
+                      </label>
+
+                      {/* Admin */}
+                      <label className={`border rounded-lg p-2.5 cursor-pointer flex items-center justify-between transition ${newUserRole === 'ADMIN' ? 'border-primary-500 bg-primary-50/40 text-primary-800' : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'}`}>
+                        <div className="flex flex-col text-left"><span className="font-bold text-[10.5px] uppercase tracking-wide">Admin</span><span className="text-[9.5px] text-slate-400 font-medium">Kelola aset, master data, impor, dan laporan</span></div>
+                        <input type="radio" name="new-user-role" value="ADMIN" checked={newUserRole === 'ADMIN'} onChange={() => setNewUserRole('ADMIN')} className="text-primary-600 focus:ring-primary-500 w-3.5 h-3.5" />
+                      </label>
+
+                      {/* Operator */}
+                      <label className={`border rounded-lg p-2.5 cursor-pointer flex items-center justify-between transition ${newUserRole === 'OPERATOR' ? 'border-primary-500 bg-primary-50/40 text-primary-800' : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'}`}>
+                        <div className="flex flex-col text-left"><span className="font-bold text-[10.5px] uppercase tracking-wide">Operator</span><span className="text-[9.5px] text-slate-400 font-medium">Tambah dan ubah aset, tanpa hapus data</span></div>
+                        <input type="radio" name="new-user-role" value="OPERATOR" checked={newUserRole === 'OPERATOR'} onChange={() => setNewUserRole('OPERATOR')} className="text-primary-600 focus:ring-primary-500 w-3.5 h-3.5" />
                       </label>
                     </div>
                   </div>
