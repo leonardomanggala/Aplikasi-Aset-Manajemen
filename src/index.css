@@ -48,11 +48,17 @@ h1, h2, h3, h4, .font-display {
 
 /* Sidebar treatment based on the supplied navigation capture. */
 .simas-sidebar {
-  background: #0f172a !important;
+  background: #151d2d !important;
   border-color: #1e293b !important;
   color: #cbd5e1 !important;
   box-shadow: 1px 0 18px rgb(15 23 42 / .18) !important;
 }
+.simas-sidebar .brand { padding: .8rem .75rem 1.35rem !important; }
+.simas-sidebar nav { padding: .65rem !important; gap: .2rem !important; }
+.simas-sidebar nav > button,
+.simas-sidebar nav .space-y-1 > button { padding-top: .58rem !important; padding-bottom: .58rem !important; padding-left: .65rem !important; padding-right: .65rem !important; font-size: 10px !important; }
+.simas-sidebar nav .space-y-1 .overflow-hidden { padding-left: .65rem !important; }
+.simas-sidebar .operator-switch { padding: .75rem !important; }
 .simas-sidebar .bg-slate-950,
 .simas-sidebar .bg-slate-900,
 .simas-sidebar .bg-slate-900\/50 {
@@ -89,14 +95,14 @@ h1, h2, h3, h4, .font-display {
 .simas-dashboard .shadow-sm { box-shadow: 0 8px 22px rgb(15 23 42 / .045); }
 
 html.dark .simas-sidebar {
-  background: #0f172a !important;
+  background: #151d2d !important;
   border-color: #1e293b !important;
   box-shadow: 1px 0 18px rgb(0 0 0 / .25) !important;
 }
 html.dark .simas-sidebar .bg-slate-950,
 html.dark .simas-sidebar .bg-slate-900,
 html.dark .simas-sidebar .bg-slate-900\/50 {
-  background: #0f172a !important;
+  background: #151d2d !important;
 }
 html.dark .simas-sidebar .border-slate-800\/50,
 html.dark .simas-sidebar .border-slate-800\/60 {

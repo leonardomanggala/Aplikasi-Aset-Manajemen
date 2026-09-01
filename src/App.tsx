@@ -743,10 +743,10 @@ export default function App() {
       )}
 
       {/* 1. Left Sidebar Navigation Panel */}
-      <aside className={`simas-sidebar fixed inset-y-0 left-0 z-50 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 w-72 md:w-auto ${isSidebarCollapsed ? 'md:w-20' : 'md:w-64'} bg-slate-950 flex flex-col border-r border-slate-800/50 text-slate-300 shrink-0 select-none md:sticky md:top-0 h-screen transition-all duration-300 ease-in-out shadow-2xl shadow-slate-950/20`}>
+      <aside className={`simas-sidebar fixed inset-y-0 left-0 z-50 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 w-72 md:w-auto ${isSidebarCollapsed ? 'md:w-16' : 'md:w-56'} bg-slate-950 flex flex-col border-r border-slate-800/50 text-slate-300 shrink-0 select-none md:sticky md:top-0 h-screen transition-all duration-300 ease-in-out shadow-2xl shadow-slate-950/20`}>
         
         {/* Sidebar Header Brand segment */}
-        <div className={`p-4 border-b border-slate-800/50 flex items-center justify-between transition-all`}>
+        <div className={`h-16 ${isSidebarCollapsed ? 'px-2' : 'px-4'} border-b border-slate-800/50 flex items-center justify-between transition-all`}>
           {(!isSidebarCollapsed || isMobileMenuOpen) && (
             <div className="flex items-center gap-2.5 animate-fade-in shrink-0">
               {appLogo ? (
@@ -849,7 +849,7 @@ export default function App() {
                     onClick={() => handleTabChange('assets_tidak_bergerak')}
                     className={`w-full flex items-center justify-between py-2 px-3 rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
                       activeTab === 'assets_tidak_bergerak'
-                        ? 'bg-primary-500/10 text-primary-400 font-bold ring-1 ring-primary-500/30 shadow-lg shadow-primary-500/20'
+                        ? 'bg-[#274a79] text-blue-200 font-bold ring-1 ring-blue-400/30 shadow-lg shadow-blue-950/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                     }`}
                   >
@@ -863,7 +863,7 @@ export default function App() {
                     onClick={() => handleTabChange('assets_bergerak')}
                     className={`w-full flex items-center justify-between py-2 px-3 rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
                       activeTab === 'assets_bergerak'
-                        ? 'bg-primary-500/10 text-primary-400 font-bold ring-1 ring-primary-500/30 shadow-lg shadow-primary-500/20'
+                        ? 'bg-[#274a79] text-blue-200 font-bold ring-1 ring-blue-400/30 shadow-lg shadow-blue-950/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                     }`}
                   >
@@ -983,7 +983,7 @@ export default function App() {
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         
         {/* Header navigation with Clock indicator */}
-        <header className="min-h-16 bg-white/95 dark:bg-slate-950/95 backdrop-blur border-b border-slate-200/80 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between px-5 lg:px-8 gap-3 shrink-0 py-3 md:py-0 sticky top-0 z-10 shadow-sm shadow-slate-200/40">
+        <header className="h-16 min-h-16 bg-white/95 dark:bg-slate-950/95 backdrop-blur border-b border-slate-200/80 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between px-5 lg:px-8 gap-3 shrink-0 py-3 md:py-0 sticky top-0 z-10 shadow-sm shadow-slate-200/40">
           
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></div>

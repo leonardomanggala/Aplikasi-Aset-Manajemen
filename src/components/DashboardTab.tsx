@@ -336,9 +336,9 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
 
       {/* Recharts Visualizations */}
       <div className="space-y-6">
-        
-        {/* Full-width Row: Bar Chart per Kategori */}
-        <div className="w-full bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Two-column chart row: category and ministry */}
+          <div className="w-full bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Representasi Nilai Buku per Kategori</h3>
@@ -379,10 +379,9 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+          </div>
 
-        {/* Full-width Row: Bar Chart per Bidang */}
-        <div className="w-full bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div className="w-full bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Jumlah Aset per Bidang</h3>
@@ -420,6 +419,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
+          </div>
           </div>
         </div>
 
