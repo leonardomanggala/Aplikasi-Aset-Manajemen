@@ -348,9 +348,9 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               <p className="text-xs text-slate-400">Membandingkan nilai awal vs nilai buku berjalan (Depresiasi)</p>
             </div>
           </div>
-          <div className="h-60">
+          <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.categoryDistribution} margin={{ top: 22, right: 8, left: 2, bottom: 60 }} barCategoryGap="12%">
+              <BarChart data={stats.categoryDistribution} margin={{ top: 22, right: 8, left: 2, bottom: 78 }} barCategoryGap="12%">
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="category" 
@@ -392,9 +392,9 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               <p className="text-xs text-slate-400">Komparasi kuantitas aset yang dikelola oleh setiap bidang (Komsos, P3K, dll)</p>
             </div>
           </div>
-          <div className="h-60">
+          <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.bidangDistribution} margin={{ top: 22, right: 8, left: 2, bottom: 52 }} barCategoryGap="16%">
+              <BarChart data={stats.bidangDistribution} margin={{ top: 22, right: 8, left: 2, bottom: 70 }} barCategoryGap="16%">
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="bidang" 
