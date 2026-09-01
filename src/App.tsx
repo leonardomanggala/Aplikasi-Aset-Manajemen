@@ -894,7 +894,7 @@ export default function App() {
                     onClick={() => handleTabChange('assets_tidak_bergerak')}
                     className={`w-full flex items-center justify-between py-2 px-3 rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
                       activeTab === 'assets_tidak_bergerak'
-                        ? 'bg-[#274a79] text-blue-200 font-bold ring-1 ring-blue-400/30 shadow-lg shadow-blue-950/20'
+                        ? 'bg-[#3b1f6f] text-purple-200 font-bold ring-1 ring-purple-400/30 shadow-lg shadow-purple-950/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                     }`}
                   >
@@ -908,7 +908,7 @@ export default function App() {
                     onClick={() => handleTabChange('assets_bergerak')}
                     className={`w-full flex items-center justify-between py-2 px-3 rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
                       activeTab === 'assets_bergerak'
-                        ? 'bg-[#274a79] text-blue-200 font-bold ring-1 ring-blue-400/30 shadow-lg shadow-blue-950/20'
+                        ? 'bg-[#3b1f6f] text-purple-200 font-bold ring-1 ring-purple-400/30 shadow-lg shadow-purple-950/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                     }`}
                   >
