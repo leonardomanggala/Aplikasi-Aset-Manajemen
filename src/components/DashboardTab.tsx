@@ -35,6 +35,9 @@ const COLORS = {
   RUSAK_BERAT: '#ef4444'   // Red 500
 };
 
+const truncateChartLabel = (value: string, maxLength = 16) =>
+  value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value;
+
 interface DashboardTabProps {
   assets: Asset[];
   onSelectAsset: (asset: Asset) => void;
@@ -338,26 +341,27 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
       <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Two-column chart row: category and ministry */}
-          <div className="w-full bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex justify-between items-center mb-4">
+          <div className="w-full bg-white p-6 md:p-7 rounded-xl border border-slate-200 shadow-sm">
+          <div className="flex justify-between items-start mb-5 min-h-12">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Representasi Nilai Buku per Kategori</h3>
               <p className="text-xs text-slate-400">Membandingkan nilai awal vs nilai buku berjalan (Depresiasi)</p>
             </div>
           </div>
-          <div className="h-96">
+          <div className="h-[26rem]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.categoryDistribution} margin={{ top: 15, right: 15, left: 75, bottom: 85 }}>
+              <BarChart data={stats.categoryDistribution} margin={{ top: 24, right: 24, left: 64, bottom: 108 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="category" 
-                  tick={{ fill: '#64748b', fontSize: 10, fontWeight: '500' }}
+                  tick={{ fill: '#64748b', fontSize: 9, fontWeight: '500' }}
                   axisLine={false}
                   tickLine={false}
                   interval={0}
-                  angle={-30}
+                  tickFormatter={(value) => truncateChartLabel(String(value), 14)}
+                  angle={-32}
                   textAnchor="end"
-                  height={80}
+                  height={105}
                 />
                 <YAxis 
                   width={80}
@@ -381,26 +385,27 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
           </div>
           </div>
 
-          <div className="w-full bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex justify-between items-center mb-4">
+          <div className="w-full bg-white p-6 md:p-7 rounded-xl border border-slate-200 shadow-sm">
+          <div className="flex justify-between items-start mb-5 min-h-12">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Jumlah Aset per Bidang</h3>
               <p className="text-xs text-slate-400">Komparasi kuantitas aset yang dikelola oleh setiap bidang (Komsos, P3K, dll)</p>
             </div>
           </div>
-          <div className="h-80">
+          <div className="h-[26rem]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.bidangDistribution} margin={{ top: 15, right: 15, left: 20, bottom: 65 }}>
+              <BarChart data={stats.bidangDistribution} margin={{ top: 24, right: 24, left: 24, bottom: 98 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="bidang" 
-                  tick={{ fill: '#64748b', fontSize: 10, fontWeight: '500' }}
+                  tick={{ fill: '#64748b', fontSize: 9, fontWeight: '500' }}
                   axisLine={false}
                   tickLine={false}
                   interval={0}
-                  angle={-30}
+                  tickFormatter={(value) => truncateChartLabel(String(value), 16)}
+                  angle={-32}
                   textAnchor="end"
-                  height={60}
+                  height={95}
                 />
                 <YAxis 
                   width={40}
