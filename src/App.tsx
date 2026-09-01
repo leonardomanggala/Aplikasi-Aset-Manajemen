@@ -949,27 +949,6 @@ export default function App() {
             {!isSidebarCollapsed && <span>Pengaturan Akun</span>}
           </button>
 
-          {!isSidebarCollapsed ? (
-            <div className="border-t border-slate-800/60 my-4 pt-3">
-              <div className="flex items-center justify-between px-2 mb-2">
-                <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Kredensial Operator</div>
-              </div>
-              <div className="px-2 py-2 bg-slate-900/50 rounded-lg border border-slate-800/50 space-y-1.5 text-[10px]/snug text-slate-400 font-mono">
-                <div className="text-slate-500">EMAIL:</div>
-                <div className="text-primary-400 truncate font-semibold">{currentUser.email}</div>
-                <div className="text-slate-500 pt-1">HAK AKSES:</div>
-                <div className="text-white">
-                  {currentUser.role === 'SUPER_ADMIN' ? 'SUPER CONTROL' : currentUser.role === 'KOORDINATOR_TIM' ? `TIM: ${currentUser.kategoriAkses}` : 'LIHAT SAJA'}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="border-t border-slate-800/60 my-4 pt-3 flex flex-col items-center gap-2">
-              <div className="w-7 h-7 bg-slate-900 text-primary-400 border border-slate-800/50 font-bold font-mono rounded-full flex items-center justify-center text-[10px] transition-transform hover:scale-105 cursor-pointer" title={`Operator: ${currentUser.name}`}>
-                {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'O'}
-              </div>
-            </div>
-          )}
         </nav>
 
         {/* Sidebar Footer RBAC Operator Switcher */}
