@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Asset, 
   User, 
@@ -107,6 +107,7 @@ export default function App() {
       };
     });
   });
+  const localAssetsCache = useRef<Asset[]>(assets);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -176,7 +177,7 @@ export default function App() {
             bidangMap: JSON.parse(localStorage.getItem('sim_aset_paroki_bidang') || 'null') || BIDANG_MAP,
             appLogo: localStorage.getItem('sim_aset_paroki_logo') || null
           }).catch(console.error);
-        } else if (remoteMasterData.appLogo === undefined) {
+        } else if (!remoteMasterData.appLogo) {
           const localLogo = localStorage.getItem('sim_aset_paroki_logo');
           if (localLogo) {
             syncMasterDataToFirebase({ appLogo: localLogo }).catch(console.error);
@@ -232,6 +233,30 @@ export default function App() {
       };
     });
   });
+  const localUsersCache = useRef<User[]>(users);
+
+  // Bootstrap local data to the shared Firebase database when cloud collections are empty.
+  // This prevents desktop/mobile browsers from diverging because of separate localStorage caches.
+  const cloudBootstrapAttempted = useRef(false);
+  useEffect(() => {
+    if (isLoading || cloudBootstrapAttempted.current) return;
+    cloudBootstrapAttempted.current = true;
+
+    Promise.all([getAllAssetsFromFirebase(), getAllUsersFromFirebase()])
+      .then(async ([remoteAssets, remoteUsers]) => {
+        const tasks: Promise<unknown>[] = [];
+        if (remoteAssets.length < localAssetsCache.current.length) {
+          tasks.push(syncAllAssetsToFirebase(localAssetsCache.current));
+        }
+        if (remoteUsers.length < localUsersCache.current.length) {
+          tasks.push(syncAllUsersToFirebase(localUsersCache.current));
+        }
+        await Promise.all(tasks);
+      })
+      .catch(error => {
+        console.error('Gagal menyamakan cache lokal dengan database cloud:', error);
+      });
+  }, [isLoading]);
 
   const [appLogo, setAppLogo] = useState<string | null>(() => {
     return localStorage.getItem('sim_aset_paroki_logo');
