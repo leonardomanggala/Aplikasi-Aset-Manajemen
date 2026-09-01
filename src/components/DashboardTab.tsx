@@ -339,18 +339,18 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
 
       {/* Recharts Visualizations */}
       <div className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* Two-column chart row: category and ministry */}
-          <div className="w-full bg-white p-5 md:p-6 rounded-xl border border-slate-200 shadow-sm">
+          <div className="w-full self-start h-fit bg-white p-5 md:p-6 rounded-xl border border-slate-200 shadow-sm">
           <div className="flex justify-between items-start mb-3 min-h-12">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Representasi Nilai Buku per Kategori</h3>
               <p className="text-xs text-slate-400">Membandingkan nilai awal vs nilai buku berjalan (Depresiasi)</p>
             </div>
           </div>
-          <div className="h-80">
+          <div className="h-60">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.categoryDistribution} margin={{ top: 8, right: 8, left: 2, bottom: 78 }} barCategoryGap="12%">
+              <BarChart data={stats.categoryDistribution} margin={{ top: 22, right: 8, left: 2, bottom: 60 }} barCategoryGap="12%">
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="category" 
@@ -385,16 +385,16 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
           </div>
           </div>
 
-          <div className="w-full bg-white p-5 md:p-6 rounded-xl border border-slate-200 shadow-sm">
+          <div className="w-full self-start h-fit bg-white p-5 md:p-6 rounded-xl border border-slate-200 shadow-sm">
           <div className="flex justify-between items-start mb-3 min-h-12">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Jumlah Aset per Bidang</h3>
               <p className="text-xs text-slate-400">Komparasi kuantitas aset yang dikelola oleh setiap bidang (Komsos, P3K, dll)</p>
             </div>
           </div>
-          <div className="h-80">
+          <div className="h-60">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.bidangDistribution} margin={{ top: 8, right: 8, left: 2, bottom: 68 }} barCategoryGap="16%">
+              <BarChart data={stats.bidangDistribution} margin={{ top: 22, right: 8, left: 2, bottom: 52 }} barCategoryGap="16%">
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="bidang" 
