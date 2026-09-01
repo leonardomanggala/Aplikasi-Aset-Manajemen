@@ -748,7 +748,7 @@ export default function App() {
       )}
 
       {/* 1. Left Sidebar Navigation Panel */}
-      <aside className={`simas-sidebar fixed inset-y-0 left-0 z-50 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 w-72 md:w-auto ${isSidebarCollapsed ? 'md:w-16' : 'md:w-56'} bg-slate-950 flex flex-col border-r border-slate-800/50 text-slate-300 shrink-0 select-none md:sticky md:top-0 h-screen transition-all duration-300 ease-in-out shadow-2xl shadow-slate-950/20`}>
+      <aside className={`simas-sidebar relative fixed inset-y-0 left-0 z-50 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 w-72 md:w-auto ${isSidebarCollapsed ? 'md:w-16' : 'md:w-56'} bg-slate-950 flex flex-col border-r border-slate-800/50 text-slate-300 shrink-0 select-none md:sticky md:top-0 h-screen transition-all duration-300 ease-in-out shadow-2xl shadow-slate-950/20`}>
         
         {/* Sidebar Header Brand segment */}
         <div className={`h-16 ${isSidebarCollapsed ? 'px-2' : 'px-4'} border-b border-slate-800/50 flex items-center justify-between transition-all`}>
@@ -786,16 +786,18 @@ export default function App() {
             <X className="w-5 h-5" />
           </button>
 
-          {/* Collapse trigger button */}
-          <button 
-            type="button"
-            onClick={toggleSidebar}
-            className={`hidden md:flex items-center justify-center w-6 h-6 rounded-md bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800/50 transition-colors ${isSidebarCollapsed ? 'ml-0' : ''}`}
-            title={isSidebarCollapsed ? "Expand Sidebar (Perbesar menu)" : "Collapse Sidebar (Kecilkan menu)"}
-          >
-            {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          </button>
         </div>
+
+        {/* Desktop sidebar resize control: floating on the navigation edge */}
+        <button
+          type="button"
+          onClick={toggleSidebar}
+          className="hidden md:flex absolute top-1/2 -right-3 -translate-y-1/2 z-20 items-center justify-center w-6 h-10 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-100 border border-slate-700 shadow-lg transition-colors"
+          title={isSidebarCollapsed ? "Expand Sidebar (Perbesar menu)" : "Collapse Sidebar (Kecilkan menu)"}
+          aria-label={isSidebarCollapsed ? "Perbesar sidebar" : "Kecilkan sidebar"}
+        >
+          {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+        </button>
 
         {/* Sidebar Menu sections */}
         <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto">
