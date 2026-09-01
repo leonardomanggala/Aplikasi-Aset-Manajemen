@@ -44,6 +44,7 @@ import QrScanTab from './components/QrScanTab';
 import BulkImportTab from './components/BulkImportTab';
 import MasterDataTab from './components/MasterDataTab';
 import AccountSettingsTab from './components/AccountSettingsTab';
+import ReportsTab from './components/ReportsTab';
 import AssetModal from './components/AssetModal';
 import Login from './components/Login';
 import { motion, AnimatePresence } from 'motion/react';
@@ -52,7 +53,8 @@ import {
   LayoutDashboard, 
   ClipboardList, 
   Scan, 
-  FileSpreadsheet, 
+  FileSpreadsheet,
+  FileText,
   UserCheck, 
   Clock, 
   Church, 
@@ -189,7 +191,7 @@ export default function App() {
     };
   }, []); // Only on mount
 
-  const handleTabChange = (tab: 'dashboard' | 'assets_bergerak' | 'assets_tidak_bergerak' | 'qr' | 'import' | 'master' | 'account') => {
+  const handleTabChange = (tab: 'dashboard' | 'assets_bergerak' | 'assets_tidak_bergerak' | 'qr' | 'import' | 'master' | 'reports' | 'account') => {
     setActiveTab(tab);
     setIsMobileMenuOpen(false);
   };
@@ -231,7 +233,7 @@ export default function App() {
   const [appLogo, setAppLogo] = useState<string | null>(() => {
     return localStorage.getItem('sim_aset_paroki_logo');
   });
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'assets_bergerak' | 'assets_tidak_bergerak' | 'qr' | 'import' | 'master' | 'account'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'assets_bergerak' | 'assets_tidak_bergerak' | 'qr' | 'import' | 'master' | 'reports' | 'account'>('dashboard');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
     const cached = localStorage.getItem('sim_aset_sidebar_collapsed');
     return cached === 'true';
@@ -811,6 +813,19 @@ export default function App() {
             {!isSidebarCollapsed && <span>Dashboard</span>}
           </button>
 
+          <button
+            onClick={() => handleTabChange('reports')}
+            title="Laporan Inventaris dan Akuntansi"
+            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
+              activeTab === 'reports'
+                ? 'bg-primary-500/10 text-primary-400 font-bold ring-1 ring-primary-500/30 shadow-lg shadow-primary-500/20'
+                : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+            }`}
+          >
+            <FileText className="w-4 h-4 text-primary-500 shrink-0" />
+            {!isSidebarCollapsed && <span>Pelaporan</span>}
+          </button>
+
           <div className="space-y-1">
             <button
               onClick={() => {
@@ -1060,6 +1075,15 @@ export default function App() {
                   assets={assets}
                   onSelectAsset={handleInspectAssetInScanner}
                   jenisAsetMap={jenisAsetMap}
+                  bidangMap={bidangMap}
+                />
+              )}
+
+              {activeTab === 'reports' && (
+                <ReportsTab
+                  assets={assets}
+                  jenisAsetMap={jenisAsetMap}
+                  letakRuangMap={letakRuangMap}
                   bidangMap={bidangMap}
                 />
               )}
