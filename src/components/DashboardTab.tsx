@@ -348,9 +348,9 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               <p className="text-xs text-slate-400">Membandingkan nilai awal vs nilai buku berjalan (Depresiasi)</p>
             </div>
           </div>
-          <div className="h-[26rem]">
+          <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.categoryDistribution} margin={{ top: 20, right: 10, left: 8, bottom: 108 }} barCategoryGap="14%">
+              <BarChart data={stats.categoryDistribution} margin={{ top: 16, right: 10, left: 8, bottom: 92 }} barCategoryGap="14%">
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="category" 
@@ -361,7 +361,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                   tickFormatter={(value) => truncateChartLabel(String(value), 14)}
                   angle={-32}
                   textAnchor="end"
-                  height={105}
+                  height={88}
                 />
                 <YAxis 
                   width={58}
@@ -377,7 +377,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                   ]}
                   contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
                 />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '4px' }} />
                 <Bar name="originalValue" dataKey="originalValue" fill="#cbd5e1" radius={[4, 4, 0, 0]} barSize={25} />
                 <Bar name="bookValue" dataKey="bookValue" fill="#10b981" radius={[4, 4, 0, 0]} barSize={25} />
               </BarChart>
@@ -392,9 +392,9 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               <p className="text-xs text-slate-400">Komparasi kuantitas aset yang dikelola oleh setiap bidang (Komsos, P3K, dll)</p>
             </div>
           </div>
-          <div className="h-[26rem]">
+          <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.bidangDistribution} margin={{ top: 20, right: 10, left: 8, bottom: 98 }} barCategoryGap="18%">
+              <BarChart data={stats.bidangDistribution} margin={{ top: 16, right: 10, left: 8, bottom: 82 }} barCategoryGap="18%">
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="bidang" 
@@ -405,7 +405,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                   tickFormatter={(value) => truncateChartLabel(String(value), 16)}
                   angle={-32}
                   textAnchor="end"
-                  height={95}
+                  height={78}
                 />
                 <YAxis 
                   width={34}
