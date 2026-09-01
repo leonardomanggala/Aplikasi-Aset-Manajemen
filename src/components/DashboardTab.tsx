@@ -350,7 +350,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
           </div>
           <div className="h-[26rem]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.categoryDistribution} margin={{ top: 24, right: 24, left: 64, bottom: 108 }}>
+              <BarChart data={stats.categoryDistribution} margin={{ top: 20, right: 10, left: 8, bottom: 108 }} barCategoryGap="14%">
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="category" 
@@ -364,7 +364,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                   height={105}
                 />
                 <YAxis 
-                  width={80}
+                  width={58}
                   tick={{ fill: '#64748b', fontSize: 10 }}
                   axisLine={false}
                   tickLine={false}
@@ -394,7 +394,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
           </div>
           <div className="h-[26rem]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.bidangDistribution} margin={{ top: 24, right: 24, left: 24, bottom: 98 }}>
+              <BarChart data={stats.bidangDistribution} margin={{ top: 20, right: 10, left: 8, bottom: 98 }} barCategoryGap="18%">
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis 
                   dataKey="bidang" 
@@ -408,7 +408,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                   height={95}
                 />
                 <YAxis 
-                  width={40}
+                  width={34}
                   tick={{ fill: '#64748b', fontSize: 10 }}
                   axisLine={false}
                   tickLine={false}
