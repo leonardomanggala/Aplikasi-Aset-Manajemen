@@ -827,13 +827,13 @@ export default function App() {
         {/* Sidebar Menu sections */}
         <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto">
           {!isSidebarCollapsed && (
-            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-3 px-2">Menu Utama</div>
+            <div className="text-xs text-slate-500 font-semibold tracking-wide mb-3 px-2">Menu Utama</div>
           )}
           
           <button
             onClick={() => handleTabChange('dashboard')}
             title="Dashboard Rekapitulasi"
-            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
+            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-sm font-semibold tracking-normal transition ${
               activeTab === 'dashboard'
                 ? 'bg-primary-500/10 text-primary-400 font-bold ring-1 ring-primary-500/30 shadow-lg shadow-primary-500/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
@@ -846,7 +846,7 @@ export default function App() {
           <button
             onClick={() => handleTabChange('reports')}
             title="Laporan Inventaris dan Akuntansi"
-            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
+            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-sm font-semibold tracking-normal transition ${
               activeTab === 'reports'
                 ? 'bg-primary-500/10 text-primary-400 font-bold ring-1 ring-primary-500/30 shadow-lg shadow-primary-500/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
@@ -867,7 +867,7 @@ export default function App() {
                 }
               }}
               title={`Register Aset (${assets.length})`}
-              className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'justify-between py-2.5 px-3'} rounded-lg text-[11px] font-bold uppercase tracking-wider transition relative ${
+              className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'justify-between py-2.5 px-3'} rounded-lg text-sm font-semibold tracking-normal transition relative ${
                 (activeTab === 'assets_bergerak' || activeTab === 'assets_tidak_bergerak')
                   ? 'bg-primary-500/10 text-primary-400 font-bold ring-1 ring-primary-500/30 shadow-lg shadow-primary-500/20'
                   : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
@@ -892,7 +892,7 @@ export default function App() {
                 >
                   <button
                     onClick={() => handleTabChange('assets_tidak_bergerak')}
-                    className={`w-full flex items-center justify-between py-2 px-3 rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
+                    className={`w-full flex items-center justify-between py-2 px-3 rounded-lg text-sm font-semibold tracking-normal transition ${
                       activeTab === 'assets_tidak_bergerak'
                         ? 'bg-[#3b1f6f] text-purple-200 font-bold ring-1 ring-purple-400/30 shadow-lg shadow-purple-950/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
@@ -906,7 +906,7 @@ export default function App() {
                   </button>
                   <button
                     onClick={() => handleTabChange('assets_bergerak')}
-                    className={`w-full flex items-center justify-between py-2 px-3 rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
+                    className={`w-full flex items-center justify-between py-2 px-3 rounded-lg text-sm font-semibold tracking-normal transition ${
                       activeTab === 'assets_bergerak'
                         ? 'bg-[#3b1f6f] text-purple-200 font-bold ring-1 ring-purple-400/30 shadow-lg shadow-purple-950/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
@@ -926,7 +926,7 @@ export default function App() {
           <button
             onClick={() => handleTabChange('qr')}
             title="Pantau & QR Scanner Hub"
-            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3 text-primary-500 hover:bg-slate-800/50' : 'gap-3 py-2.5 px-3'} rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
+            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3 text-primary-500 hover:bg-slate-800/50' : 'gap-3 py-2.5 px-3'} rounded-lg text-sm font-semibold tracking-normal transition ${
               activeTab === 'qr'
                 ? 'bg-primary-500/10 text-primary-400 font-bold ring-1 ring-primary-500/30 shadow-lg shadow-primary-500/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
@@ -940,7 +940,7 @@ export default function App() {
           <button
             onClick={() => handleTabChange('import')}
             title="Unggah Lembar Kerja Excel"
-            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
+            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-sm font-semibold tracking-normal transition ${
               activeTab === 'import'
                 ? 'bg-primary-500/10 text-primary-400 font-bold ring-1 ring-primary-500/30 shadow-lg shadow-primary-500/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
@@ -955,7 +955,7 @@ export default function App() {
           <button
             onClick={() => handleTabChange('master')}
             title="Konfigurasi Master Data"
-            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
+            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-sm font-semibold tracking-normal transition ${
               activeTab === 'master'
                 ? 'bg-primary-500/10 text-primary-400 font-bold ring-1 ring-primary-500/30 shadow-lg shadow-primary-500/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
@@ -969,7 +969,7 @@ export default function App() {
           <button
             onClick={() => handleTabChange('account')}
             title="Pengaturan Akun"
-            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${
+            className={`w-full flex items-center ${isSidebarCollapsed ? 'justify-center py-3' : 'gap-3 py-2.5 px-3'} rounded-lg text-sm font-semibold tracking-normal transition ${
               activeTab === 'account'
                 ? 'bg-primary-500/10 text-primary-400 font-bold ring-1 ring-primary-500/30 shadow-lg shadow-primary-500/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
