@@ -269,6 +269,11 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
     };
   }, [assets, activeJenisAsetMap]);
 
+  const maxBidangBookValue = Math.max(
+    ...stats.bidangDistribution.map(item => Number(item.value) || 0),
+    1
+  );
+
   return (
     <div id="dashboard-container" className="simas-dashboard space-y-7">
       {/* Summary KPI Cards */}
@@ -434,23 +439,22 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Distribusi Nilai Aset per Bidang</h3>
               <p className="text-xs text-slate-400 mb-4">Total nilai buku berdasarkan bidang fungsional</p>
             </div>
-            <div className="h-[28rem]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={stats.bidangDistribution} layout="vertical" margin={{ top: 10, right: 18, left: 8, bottom: 8 }} barCategoryGap="18%">
-                  <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                  <XAxis type="number" tickFormatter={(val) => `Rp ${val / 1e6}jt`} tick={{ fill: '#64748b', fontSize: 10 }} axisLine={false} tickLine={false} />
-                  <YAxis dataKey="bidang" type="category" interval={0} tick={{ fill: '#64748b', fontSize: 9, fontWeight: '500' }} axisLine={false} tickLine={false} width={132} tickFormatter={(value) => truncateChartLabel(String(value), 20)} />
-                  <Tooltip 
-                    formatter={(value: any) => [formatRupiah(value), 'Total Nilai Buku']}
-                    contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
-                  />
-                  <Bar dataKey="value" fill="#7c3aed" radius={[0, 4, 4, 0]} barSize={20}>
-                    {stats.bidangDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={['#7c3aed', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#0ea5e9', '#ec4899', '#f97316'][index % 8]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="space-y-3 mt-2">
+              {stats.bidangDistribution.map((item, index) => {
+                const width = item.value > 0 ? Math.max((item.value / maxBidangBookValue) * 100, 2) : 0;
+                const colors = ['#7c3aed', '#8b5cf6', '#10b981', '#0ea5e9', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'];
+                return (
+                  <div key={item.bidang} className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-3 text-[11px]">
+                      <span className="font-semibold text-slate-700 truncate" title={item.bidang}>{item.bidang}</span>
+                      <span className="font-mono font-bold text-slate-600 whitespace-nowrap">{formatRupiah(item.value)}</span>
+                    </div>
+                    <div className="h-2.5 w-full rounded-full bg-slate-100 overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-500" style={{ width: `${width}%`, backgroundColor: colors[index % colors.length] }} />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
