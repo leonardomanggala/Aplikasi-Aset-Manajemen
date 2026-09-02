@@ -5,8 +5,6 @@
 
 import React, { useMemo, useState } from 'react';
 import {
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -393,47 +391,6 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
           </div>
           </div>
 
-          <div className="w-full self-start h-fit bg-white p-5 md:p-6 rounded-xl border border-slate-200 shadow-sm lg:order-3">
-          <div className="flex justify-between items-start mb-3 min-h-12">
-            <div>
-              <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Jumlah Aset per Bidang</h3>
-              <p className="text-xs text-slate-400">Komparasi kuantitas aset yang dikelola oleh setiap bidang (Komsos, P3K, dll)</p>
-            </div>
-          </div>
-          <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.bidangDistribution} layout="vertical" margin={{ top: 12, right: 18, left: 8, bottom: 12 }} barCategoryGap="22%">
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                <XAxis 
-                  type="number"
-                  tick={{ fill: '#64748b', fontSize: 9 }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis 
-                  dataKey="bidang"
-                  type="category"
-                  width={100}
-                  interval={0}
-                  tick={{ fill: '#64748b', fontSize: 9, fontWeight: '500' }}
-                  axisLine={false}
-                  tickLine={false}
-                  tickFormatter={(value) => truncateChartLabel(String(value), 17)}
-                />
-                <Tooltip 
-                  formatter={(value: any) => [`${value} unit`, 'Jumlah Aset']}
-                  contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
-                />
-                <Bar name="Jumlah Aset" dataKey="count" fill="#7c3aed" radius={[0, 4, 4, 0]} barSize={16}>
-                  {stats.bidangDistribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={['#7c3aed', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#0ea5e9', '#ec4899', '#f97316'][index % 8]} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          </div>
-        
           {/* Column 1: Distribusi Nilai Aset per Bidang */}
           <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between lg:order-2">
             <div>
@@ -458,43 +415,6 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               })}
             </div>
           </div>
-
-          {/* Column 2: Distribusi Nilai per Kategori (Bergerak/Tidak Bergerak) */}
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between lg:order-4">
-            <div>
-              <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Distribusi Nilai per Sifat Kategori</h3>
-              <p className="text-xs text-slate-400 mb-4">Proporsi nilai buku antara Aset Bergerak dan Tidak Bergerak</p>
-            </div>
-            <div className="h-64 flex items-center justify-center relative">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={stats.kategoriValueDistribution}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={85}
-                    paddingAngle={4}
-                    dataKey="value"
-                  >
-                    {stats.kategoriValueDistribution?.map((entry, index) => (
-                      <Cell key={entry.name} fill={index === 0 ? '#10b981' : '#f59e0b'} />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    formatter={(value: any) => [formatRupiah(value), 'Total Nilai Buku']}
-                    contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
-                  />
-                  <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="absolute text-center flex flex-col items-center top-[40%] pointer-events-none">
-                <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider mb-1">Total Buku</span>
-                <span className="text-[11px] font-bold font-mono text-slate-700">{formatRupiah(stats.totalBookValue)}</span>
-              </div>
-            </div>
-          </div>
-        
 
         </div>
 
