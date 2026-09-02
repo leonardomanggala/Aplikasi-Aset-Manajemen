@@ -273,6 +273,10 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
     ...stats.bidangDistribution.map(item => Number(item.value) || 0),
     1
   );
+  const maxCategoryOriginalValue = Math.max(
+    ...stats.categoryDistribution.map(item => Number(item.originalValue) || 0),
+    1
+  );
 
   return (
     <div id="dashboard-container" className="simas-dashboard space-y-7">
@@ -346,50 +350,50 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
       <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* Two-column chart row: category and ministry */}
-          <div className="w-full self-start h-fit bg-white p-5 md:p-6 rounded-xl border border-slate-200 shadow-sm">
+          <div className="w-full self-start h-fit bg-white p-5 md:p-6 rounded-xl border border-slate-200 shadow-sm lg:order-1">
           <div className="flex justify-between items-start mb-3 min-h-12">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Representasi Nilai Buku per Kategori</h3>
               <p className="text-xs text-slate-400">Membandingkan nilai awal vs nilai buku berjalan (Depresiasi)</p>
             </div>
           </div>
-          <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.categoryDistribution} layout="vertical" margin={{ top: 12, right: 18, left: 8, bottom: 12 }} barCategoryGap="18%">
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                <XAxis 
-                  type="number"
-                  tick={{ fill: '#64748b', fontSize: 9 }}
-                  axisLine={false}
-                  tickLine={false}
-                  tickFormatter={(val) => `Rp ${val / 1e6}jt`}
-                />
-                <YAxis 
-                  dataKey="category"
-                  type="category"
-                  width={96}
-                  interval={0}
-                  tick={{ fill: '#64748b', fontSize: 9, fontWeight: '500' }}
-                  axisLine={false}
-                  tickLine={false}
-                  tickFormatter={(value) => truncateChartLabel(String(value), 16)}
-                />
-                <Tooltip 
-                  formatter={(value: any, name: any) => [
-                    formatRupiah(value),
-                    name === 'bookValue' ? 'Nilai Buku Aktual' : 'Nilai Pembelian Awal'
-                  ]}
-                  contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
-                />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '4px' }} />
-                <Bar name="originalValue" dataKey="originalValue" fill="#cbd5e1" radius={[0, 4, 4, 0]} barSize={12} />
-                <Bar name="bookValue" dataKey="bookValue" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="max-h-[28rem] overflow-y-auto pr-1 space-y-3 mt-2">
+            {stats.categoryDistribution
+              .filter(item => item.originalValue > 0 || item.bookValue > 0)
+              .map((item) => {
+                const originalWidth = item.originalValue > 0 ? Math.max((item.originalValue / maxCategoryOriginalValue) * 100, 2) : 0;
+                const bookWidth = item.bookValue > 0 ? Math.max((item.bookValue / maxCategoryOriginalValue) * 100, 2) : 0;
+                return (
+                  <div key={item.category} className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-3 text-[11px]">
+                      <span className="font-semibold text-slate-700 truncate" title={item.category}>{item.category}</span>
+                      <span className="font-mono font-bold text-slate-600 whitespace-nowrap">{formatRupiah(item.bookValue)}</span>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="w-14 shrink-0 text-[9px] text-slate-400">Perolehan</span>
+                        <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+                          <div className="h-full rounded-full bg-slate-300 transition-all duration-500" style={{ width: `${originalWidth}%` }} />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="w-14 shrink-0 text-[9px] text-primary-500">Nilai Buku</span>
+                        <div className="h-2 w-full rounded-full bg-primary-50 overflow-hidden">
+                          <div className="h-full rounded-full bg-primary-500 transition-all duration-500" style={{ width: `${bookWidth}%` }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            <div className="flex items-center gap-4 pt-1 text-[10px] text-slate-400">
+              <span className="inline-flex items-center gap-1"><i className="w-2 h-2 rounded-full bg-slate-300" />Perolehan</span>
+              <span className="inline-flex items-center gap-1 text-primary-500"><i className="w-2 h-2 rounded-full bg-primary-500" />Nilai Buku</span>
+            </div>
           </div>
           </div>
 
-          <div className="w-full self-start h-fit bg-white p-5 md:p-6 rounded-xl border border-slate-200 shadow-sm">
+          <div className="w-full self-start h-fit bg-white p-5 md:p-6 rounded-xl border border-slate-200 shadow-sm lg:order-3">
           <div className="flex justify-between items-start mb-3 min-h-12">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Jumlah Aset per Bidang</h3>
@@ -429,17 +433,14 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
             </ResponsiveContainer>
           </div>
           </div>
-        </div>
-
-        {/* New 2-Column Grid for Distribusi Nilai */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        
           {/* Column 1: Distribusi Nilai Aset per Bidang */}
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between lg:order-2">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Distribusi Nilai Aset per Bidang</h3>
               <p className="text-xs text-slate-400 mb-4">Total nilai buku berdasarkan bidang fungsional</p>
             </div>
-            <div className="space-y-3 mt-2">
+            <div className="max-h-[28rem] overflow-y-auto pr-1 space-y-3 mt-2">
               {stats.bidangDistribution.map((item, index) => {
                 const width = item.value > 0 ? Math.max((item.value / maxBidangBookValue) * 100, 2) : 0;
                 const colors = ['#7c3aed', '#8b5cf6', '#10b981', '#0ea5e9', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'];
@@ -459,7 +460,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
           </div>
 
           {/* Column 2: Distribusi Nilai per Kategori (Bergerak/Tidak Bergerak) */}
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between lg:order-4">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Distribusi Nilai per Sifat Kategori</h3>
               <p className="text-xs text-slate-400 mb-4">Proporsi nilai buku antara Aset Bergerak dan Tidak Bergerak</p>
@@ -493,6 +494,8 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               </div>
             </div>
           </div>
+        
+
         </div>
 
         {/* 3-Column Grid: Kondisi Fisik Barang, Nilai Aset per Kategori & Tren Registrasi Aset Baru */}
