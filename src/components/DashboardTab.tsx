@@ -348,27 +348,26 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               <p className="text-xs text-slate-400">Membandingkan nilai awal vs nilai buku berjalan (Depresiasi)</p>
             </div>
           </div>
-          <div className="h-72">
+          <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.categoryDistribution} margin={{ top: 22, right: 8, left: 2, bottom: 78 }} barCategoryGap="12%">
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+              <BarChart data={stats.categoryDistribution} layout="vertical" margin={{ top: 12, right: 18, left: 8, bottom: 12 }} barCategoryGap="18%">
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
                 <XAxis 
-                  dataKey="category" 
-                  tick={{ fill: '#64748b', fontSize: 9, fontWeight: '500' }}
-                  axisLine={false}
-                  tickLine={false}
-                  interval={0}
-                  tickFormatter={(value) => truncateChartLabel(String(value), 11)}
-                  angle={-38}
-                  textAnchor="end"
-                  height={74}
-                />
-                <YAxis 
-                  width={58}
-                  tick={{ fill: '#64748b', fontSize: 10 }}
+                  type="number"
+                  tick={{ fill: '#64748b', fontSize: 9 }}
                   axisLine={false}
                   tickLine={false}
                   tickFormatter={(val) => `Rp ${val / 1e6}jt`}
+                />
+                <YAxis 
+                  dataKey="category"
+                  type="category"
+                  width={96}
+                  interval={0}
+                  tick={{ fill: '#64748b', fontSize: 9, fontWeight: '500' }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={(value) => truncateChartLabel(String(value), 16)}
                 />
                 <Tooltip 
                   formatter={(value: any, name: any) => [
@@ -378,8 +377,8 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                   contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
                 />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '4px' }} />
-                <Bar name="originalValue" dataKey="originalValue" fill="#cbd5e1" radius={[4, 4, 0, 0]} barSize={18} />
-                <Bar name="bookValue" dataKey="bookValue" fill="#10b981" radius={[4, 4, 0, 0]} barSize={18} />
+                <Bar name="originalValue" dataKey="originalValue" fill="#cbd5e1" radius={[0, 4, 4, 0]} barSize={12} />
+                <Bar name="bookValue" dataKey="bookValue" fill="#10b981" radius={[0, 4, 4, 0]} barSize={12} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -392,34 +391,33 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               <p className="text-xs text-slate-400">Komparasi kuantitas aset yang dikelola oleh setiap bidang (Komsos, P3K, dll)</p>
             </div>
           </div>
-          <div className="h-72">
+          <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.bidangDistribution} margin={{ top: 22, right: 8, left: 2, bottom: 70 }} barCategoryGap="16%">
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+              <BarChart data={stats.bidangDistribution} layout="vertical" margin={{ top: 12, right: 18, left: 8, bottom: 12 }} barCategoryGap="22%">
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
                 <XAxis 
-                  dataKey="bidang" 
+                  type="number"
+                  tick={{ fill: '#64748b', fontSize: 9 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis 
+                  dataKey="bidang"
+                  type="category"
+                  width={100}
+                  interval={0}
                   tick={{ fill: '#64748b', fontSize: 9, fontWeight: '500' }}
                   axisLine={false}
                   tickLine={false}
-                  interval={0}
-                  tickFormatter={(value) => truncateChartLabel(String(value), 13)}
-                  angle={-38}
-                  textAnchor="end"
-                  height={64}
-                />
-                <YAxis 
-                  width={34}
-                  tick={{ fill: '#64748b', fontSize: 10 }}
-                  axisLine={false}
-                  tickLine={false}
+                  tickFormatter={(value) => truncateChartLabel(String(value), 17)}
                 />
                 <Tooltip 
                   formatter={(value: any) => [`${value} unit`, 'Jumlah Aset']}
                   contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
                 />
-                <Bar name="Jumlah Aset" dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={24}>
+                <Bar name="Jumlah Aset" dataKey="count" fill="#7c3aed" radius={[0, 4, 4, 0]} barSize={16}>
                   {stats.bidangDistribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#0ea5e9', '#ec4899', '#f97316'][index % 8]} />
+                    <Cell key={`cell-${index}`} fill={['#7c3aed', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#0ea5e9', '#ec4899', '#f97316'][index % 8]} />
                   ))}
                 </Bar>
               </BarChart>
@@ -429,26 +427,26 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
         </div>
 
         {/* New 2-Column Grid for Distribusi Nilai */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
           {/* Column 1: Distribusi Nilai Aset per Bidang */}
           <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
             <div>
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Distribusi Nilai Aset per Bidang</h3>
               <p className="text-xs text-slate-400 mb-4">Total nilai buku berdasarkan bidang fungsional</p>
             </div>
-            <div className="h-64">
+            <div className="h-[28rem]">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={stats.bidangDistribution} layout="vertical" margin={{ top: 10, right: 15, left: 10, bottom: 5 }}>
+                <BarChart data={stats.bidangDistribution} layout="vertical" margin={{ top: 10, right: 18, left: 8, bottom: 8 }} barCategoryGap="18%">
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
                   <XAxis type="number" tickFormatter={(val) => `Rp ${val / 1e6}jt`} tick={{ fill: '#64748b', fontSize: 10 }} axisLine={false} tickLine={false} />
-                  <YAxis dataKey="bidang" type="category" interval={0} tick={{ fill: '#64748b', fontSize: 10, fontWeight: '500' }} axisLine={false} tickLine={false} width={110} />
+                  <YAxis dataKey="bidang" type="category" interval={0} tick={{ fill: '#64748b', fontSize: 9, fontWeight: '500' }} axisLine={false} tickLine={false} width={132} tickFormatter={(value) => truncateChartLabel(String(value), 20)} />
                   <Tooltip 
                     formatter={(value: any) => [formatRupiah(value), 'Total Nilai Buku']}
                     contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
                   />
-                  <Bar dataKey="value" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={20}>
+                  <Bar dataKey="value" fill="#7c3aed" radius={[0, 4, 4, 0]} barSize={20}>
                     {stats.bidangDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#0ea5e9', '#ec4899', '#f97316'][index % 8]} />
+                      <Cell key={`cell-${index}`} fill={['#7c3aed', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#0ea5e9', '#ec4899', '#f97316'][index % 8]} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -494,7 +492,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
         </div>
 
         {/* 3-Column Grid: Kondisi Fisik Barang, Nilai Aset per Kategori & Tren Registrasi Aset Baru */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           
           {/* Column 1: Pie Chart Kondisi Fisik */}
           <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
@@ -574,7 +572,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                     {stats.categoryDistribution.filter(c => c.bookValue > 0).map((entry, index) => (
                       <Cell 
                         key={entry.category} 
-                        fill={['#0031f6', '#3b82f6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#8b5cf6', '#a855f7', '#f43f5e', '#f59e0b'][index % 10]} 
+                        fill={['#7c3aed', '#8b5cf6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#a855f7', '#c084fc', '#f43f5e', '#f59e0b'][index % 10]}
                       />
                     ))}
                   </Pie>
@@ -592,7 +590,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                 return (
                   <div key={item.category} className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2 max-w-[70%]">
-                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: ['#0031f6', '#3b82f6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#8b5cf6', '#a855f7', '#f43f5e', '#f59e0b'][index % 10] }}></span>
+                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: ['#7c3aed', '#8b5cf6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#a855f7', '#c084fc', '#f43f5e', '#f59e0b'][index % 10] }}></span>
                       <span className="text-slate-600 font-medium truncate" title={item.category}>{item.category}</span>
                     </div>
                     <span className="font-semibold text-slate-800 font-mono">{percentage}%</span>
