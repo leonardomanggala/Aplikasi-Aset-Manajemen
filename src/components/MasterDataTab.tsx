@@ -109,7 +109,7 @@ export default function MasterDataTab({
     reader.readAsText(file);
   };
 
-  const bulkUploadEnabled = ['jenis', 'ruang', 'kodeBarang'].includes(subTab);
+  const bulkUploadEnabled = true;
 
   const handleBulkMasterUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -159,9 +159,12 @@ export default function MasterDataTab({
 
         const mapName = (() => {
           switch (subTab) {
-            case 'jenis': return 'jenisAsetMap';
-            case 'ruang': return 'letakRuangMap';
+          case 'jenis': return 'jenisAsetMap';
+          case 'ruang': return 'letakRuangMap';
+            case 'teritori': return 'teritoriMap';
+            case 'peruntukan': return 'peruntukanMap';
             case 'kodeBarang': return 'kodeNamaBarangMap';
+            case 'bidang': return 'bidangMap';
             default: return '';
           }
         })();
