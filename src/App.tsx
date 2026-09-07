@@ -117,7 +117,16 @@ export default function App() {
     let masterDataInit = false;
 
     const unsubAssets = subscribeToAssets((remoteAssets) => {
+      // Hindari mengosongkan UI ketika snapshot kosong sementara datang saat
+      // bootstrap. Cache lokal akan disinkronkan kembali ke Firebase oleh
+      // proses bootstrap di bawah.
+      if (remoteAssets.length === 0 && localAssetsCache.current.length > 0 && !cloudBootstrapAttempted.current) {
+        return;
+      }
       if (remoteAssets) {
+        if (remoteAssets.length > 0) {
+          localAssetsCache.current = remoteAssets;
+        }
         setAssets(remoteAssets.map(asset => {
           const depr = calculateStraightLineDepreciation(
             asset.hargaPembelian,
@@ -488,6 +497,7 @@ export default function App() {
     };
     const assetWithLog = { ...newAsset, historyLogs: [log] };
     const nextAssets = [assetWithLog, ...assets];
+    localAssetsCache.current = nextAssets;
     setAssets(nextAssets);
     saveAssetToFirebase(assetWithLog).catch(console.error);
   };
@@ -515,6 +525,7 @@ export default function App() {
     };
 
     const nextAssets = assets.map(a => a.id === assetWithLog.id ? assetWithLog : a);
+    localAssetsCache.current = nextAssets;
     setAssets(nextAssets);
     saveAssetToFirebase(assetWithLog).catch(console.error);
     
@@ -530,6 +541,7 @@ export default function App() {
   // Actions: Delete Asset
   const handleDeleteAsset = (id: string) => {
     const nextAssets = assets.filter(a => a.id !== id);
+    localAssetsCache.current = nextAssets;
     setAssets(nextAssets);
     deleteAssetFromFirebase(id).catch(console.error);
 
@@ -543,7 +555,11 @@ export default function App() {
 
   // Actions: Delete Multiple Assets
   const handleDeleteAssets = (ids: string[]) => {
-    setAssets(prev => prev.filter(a => !ids.includes(a.id)));
+    setAssets(prev => {
+      const nextAssets = prev.filter(a => !ids.includes(a.id));
+      localAssetsCache.current = nextAssets;
+      return nextAssets;
+    });
     deleteAssetsFromFirebase(ids).catch(console.error);
 
     if (scannedAsset && ids.includes(scannedAsset.id)) {
