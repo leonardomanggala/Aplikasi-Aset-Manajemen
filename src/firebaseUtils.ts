@@ -27,12 +27,18 @@ export const deleteAssetsFromFirebase = async (assetIds: string[]) => {
 };
 
 export const syncAllAssetsToFirebase = async (assets: Asset[]) => {
-  const batch = writeBatch(db);
-  assets.forEach((asset) => {
-    const assetRef = doc(db, 'assets', asset.id);
-    batch.set(assetRef, asset);
-  });
-  await batch.commit();
+  // Firestore membatasi satu write batch hingga 500 operasi. Gunakan ukuran
+  // 400 agar upload/import besar tetap tersimpan seluruhnya tanpa gagal diam-diam.
+  const chunkSize = 400;
+  for (let i = 0; i < assets.length; i += chunkSize) {
+    const chunk = assets.slice(i, i + chunkSize);
+    const batch = writeBatch(db);
+    chunk.forEach((asset) => {
+      const assetRef = doc(db, 'assets', asset.id);
+      batch.set(assetRef, asset);
+    });
+    await batch.commit();
+  }
 };
 
 export const getAllAssetsFromFirebase = async (): Promise<Asset[]> => {

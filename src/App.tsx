@@ -703,6 +703,7 @@ export default function App() {
     const uniqueImported = Array.from(uniqueImportedMap.values());
 
     if (replaceExisting) {
+      localAssetsCache.current = uniqueImported;
       setAssets(uniqueImported);
       syncAllAssetsToFirebase(uniqueImported).catch(console.error);
     } else {
@@ -718,6 +719,7 @@ export default function App() {
       });
       
       const nextAssets = Array.from(mergedMap.values());
+      localAssetsCache.current = nextAssets;
       setAssets(nextAssets);
       syncAllAssetsToFirebase(nextAssets).catch(console.error);
     }
