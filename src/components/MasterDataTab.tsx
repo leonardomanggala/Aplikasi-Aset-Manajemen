@@ -116,7 +116,7 @@ export default function MasterDataTab({
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       try {
         const workbook = XLSX.read(event.target?.result, { type: 'array' });
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -169,8 +169,19 @@ export default function MasterDataTab({
           }
         })();
 
-        setMapState(prev => ({ ...prev, ...importedMap }));
-        updateMasterDataAtomic(mapName, importedMap, []).catch(console.error);
+        const nextMap = { ...currentMap, ...importedMap };
+        setMapState(nextMap);
+
+        // Simpan seluruh map setelah merge agar data bulk tidak hilang saat
+        // listener Firebase mengirimkan snapshot berikutnya.
+        try {
+          await syncMasterDataToFirebase({ [mapName]: nextMap });
+        } catch (error) {
+          console.error('Bulk master data sync failed:', error);
+          setFormError('Data berhasil dibaca tetapi gagal disimpan ke server. Periksa koneksi atau izin Firebase, lalu coba lagi.');
+          return;
+        }
+
         setFormError(invalidRows.length ? `Sebagian baris dilewati: ${invalidRows.length} baris tidak memiliki kode atau nama.` : '');
         setSuccessMsg(`✓ Bulk upload berhasil: ${importedEntries.length} referensi ditambahkan atau diperbarui pada ${subTabLabel}.`);
         setTimeout(() => setSuccessMsg(''), 5000);
