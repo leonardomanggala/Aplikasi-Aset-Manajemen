@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useRef } from 'react';
+import * as XLSX from 'xlsx';
 import { User, Asset, JENIS_ASET_MAP, LETAK_RUANG_MAP, TERITORI_MAP, PERUNTUKAN_MAP, KODE_NAMA_BARANG_MAP, generateNoSeriFinal, getCanonicalRole } from '../types';
 import { syncAllAssetsToFirebase, updateMasterDataAtomic, syncMasterDataToFirebase } from '../firebaseUtils';
 import { 
@@ -79,6 +80,7 @@ export default function MasterDataTab({
   const [successMsg, setSuccessMsg] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const bulkFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImportJSON = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -105,6 +107,77 @@ export default function MasterDataTab({
       }
     };
     reader.readAsText(file);
+  };
+
+  const bulkUploadEnabled = ['jenis', 'ruang', 'kodeBarang'].includes(subTab);
+
+  const handleBulkMasterUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const workbook = XLSX.read(event.target?.result, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(firstSheet, { defval: '' });
+
+        if (!rows.length) {
+          setFormError('File kosong. Gunakan kolom Kode dan Nama sebagai baris pertama.');
+          return;
+        }
+
+        const normalizeHeader = (value: unknown) => String(value ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const codeKeys = ['kode', 'code', 'kodeunik', 'id', 'kodebarang'];
+        const nameKeys = ['nama', 'name', 'deskripsi', 'namabarang', 'uraian'];
+        const headers = Object.keys(rows[0]);
+        const codeKey = headers.find(key => codeKeys.includes(normalizeHeader(key)));
+        const nameKey = headers.find(key => nameKeys.includes(normalizeHeader(key)));
+
+        if (!codeKey || !nameKey) {
+          setFormError('Format tidak sesuai. File harus memiliki kolom Kode dan Nama (atau Code dan Description).');
+          return;
+        }
+
+        const importedMap: Record<string, string> = {};
+        const invalidRows: number[] = [];
+        rows.forEach((row, index) => {
+          const code = String(row[codeKey] ?? '').trim().toUpperCase();
+          const name = String(row[nameKey] ?? '').trim();
+          if (!code || !name) {
+            invalidRows.push(index + 2);
+            return;
+          }
+          importedMap[code] = name;
+        });
+
+        const importedEntries = Object.entries(importedMap);
+        if (!importedEntries.length) {
+          setFormError('Tidak ada baris valid yang dapat diimpor.');
+          return;
+        }
+
+        const mapName = (() => {
+          switch (subTab) {
+            case 'jenis': return 'jenisAsetMap';
+            case 'ruang': return 'letakRuangMap';
+            case 'kodeBarang': return 'kodeNamaBarangMap';
+            default: return '';
+          }
+        })();
+
+        setMapState(prev => ({ ...prev, ...importedMap }));
+        updateMasterDataAtomic(mapName, importedMap, []).catch(console.error);
+        setFormError(invalidRows.length ? `Sebagian baris dilewati: ${invalidRows.length} baris tidak memiliki kode atau nama.` : '');
+        setSuccessMsg(`✓ Bulk upload berhasil: ${importedEntries.length} referensi ditambahkan atau diperbarui pada ${subTabLabel}.`);
+        setTimeout(() => setSuccessMsg(''), 5000);
+      } catch (error) {
+        setFormError('Gagal membaca file. Gunakan format CSV, XLS, atau XLSX dengan kolom Kode dan Nama.');
+      } finally {
+        if (bulkFileInputRef.current) bulkFileInputRef.current.value = '';
+      }
+    };
+    reader.readAsArrayBuffer(file);
   };
 
   // Custom non-blocking modal states
@@ -418,6 +491,24 @@ export default function MasterDataTab({
             className="hidden"
             id="import-json-upload"
           />
+          <input
+            type="file"
+            accept=".csv,.xls,.xlsx"
+            ref={bulkFileInputRef}
+            onChange={handleBulkMasterUpload}
+            className="hidden"
+            id="bulk-master-upload"
+          />
+          {bulkUploadEnabled && !isReadOnly && (
+            <button
+              onClick={() => bulkFileInputRef.current?.click()}
+              className="bg-white text-primary-600 border border-primary-200 hover:bg-primary-50 hover:border-primary-300 text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 font-semibold transition cursor-pointer text-nowrap"
+              title="Unggah file CSV atau Excel dengan kolom Kode dan Nama"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+              Bulk Upload
+            </button>
+          )}
           <button
             onClick={() => fileInputRef.current?.click()}
             className="bg-white text-primary-600 border border-primary-200 hover:bg-primary-50 hover:border-primary-300 text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 font-semibold transition cursor-pointer text-nowrap"
