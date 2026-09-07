@@ -513,8 +513,13 @@ export default function AssetListTab({
   }, [selectedAssets, currentUser]);
 
   const handleExecuteBulkDelete = () => {
-    if (onDeleteAssets && bulkDeleteGroups.deletable.length > 0) {
-      const idsToDelete = bulkDeleteGroups.deletable.map(a => a.id);
+    // Batasi operasi pada aset yang sedang terlihat setelah filter aktif.
+    // Ini mencegah pilihan lama dari filter sebelumnya ikut terhapus.
+    const visibleAssetIds = new Set(filteredAssets.map(asset => asset.id));
+    const scopedDeletable = bulkDeleteGroups.deletable.filter(asset => visibleAssetIds.has(asset.id));
+
+    if (onDeleteAssets && scopedDeletable.length > 0) {
+      const idsToDelete = Array.from(new Set<string>(scopedDeletable.map(a => a.id)));
       onDeleteAssets(idsToDelete);
       // Clear selected list
       setSelectedAssetIds(prev => prev.filter(id => !idsToDelete.includes(id)));
