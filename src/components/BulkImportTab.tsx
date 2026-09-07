@@ -236,12 +236,21 @@ export default function BulkImportTab({
           // handle Date parsing or Excel serialized counts
           if (!tanggalPerolehan) {
             tanggalPerolehan = "2024-01-01";
+          } else if (tanggalPerolehan instanceof Date) {
+            // Excel dates may be returned as Date objects when cellDates is enabled.
+            // Keep the local calendar date and avoid timezone-induced day shifts.
+            const year = tanggalPerolehan.getFullYear();
+            const month = String(tanggalPerolehan.getMonth() + 1).padStart(2, '0');
+            const day = String(tanggalPerolehan.getDate()).padStart(2, '0');
+            tanggalPerolehan = `${year}-${month}-${day}`;
           } else if (typeof tanggalPerolehan === 'number') {
             // Excel serial date integer format or just a year (e.g. 2020)
             if (tanggalPerolehan >= 1900 && tanggalPerolehan <= 2100) {
               tanggalPerolehan = `${tanggalPerolehan}-01-01`;
             } else {
-              const parsedDate = new Date((tanggalPerolehan - 25567) * 86400 * 1000);
+              // Excel's 1900 date system uses 1899-12-30 as its epoch.
+              // Using 25569 (not 25567) prevents a two-day import offset.
+              const parsedDate = new Date((tanggalPerolehan - 25569) * 86400 * 1000);
               if (!isNaN(parsedDate.getTime())) {
                 tanggalPerolehan = parsedDate.toISOString().split('T')[0];
               } else {
@@ -351,9 +360,19 @@ export default function BulkImportTab({
           // Standardize Segments Codes against master lists
           const jenisAset = reverseLookup(jenisAsetMap || JENIS_ASET_MAP, rawJenisAset, '403');
           
-          let kategoriAset = rawKategoriAset ? String(rawKategoriAset).trim().toLowerCase() : undefined;
-          if (kategoriAset !== 'bergerak' && kategoriAset !== 'tidak_bergerak') {
-            kategoriAset = ['100', '101', '401'].includes(jenisAset) ? 'tidak_bergerak' : 'bergerak';
+          const normalizedKategori = rawKategoriAset
+            ? String(rawKategoriAset).trim().toLowerCase().replace(/[\s-]+/g, '_')
+            : '';
+          let kategoriAset: string | undefined;
+          if (normalizedKategori.includes('tidak') && normalizedKategori.includes('bergerak')) {
+            kategoriAset = 'tidak_bergerak';
+          } else if (normalizedKategori.includes('bergerak')) {
+            kategoriAset = 'bergerak';
+          }
+          if (!kategoriAset) {
+            // Klasifikasi aset tidak bergerak mengikuti kelompok kode utama:
+            // 100 = Tanah, 200 = Bangunan, 300 = Bangunan Non Permanen.
+            kategoriAset = ['100', '200', '300'].includes(jenisAset) ? 'tidak_bergerak' : 'bergerak';
           }
           const teritori = reverseLookup(teritoriMap || TERITORI_MAP, rawTeritori, '01');
           const peruntukan = reverseLookup(peruntukanMap || PERUNTUKAN_MAP, rawPeruntukan, '01');
@@ -449,7 +468,7 @@ export default function BulkImportTab({
 
             // Build valid Asset model (qty is forced to 1 for individual atomic records)
             const newAsset: Asset = {
-              id: `as-import-${successCount}-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+              id: `as-import-${Date.now()}-${index}-${i}-${Math.floor(Math.random() * 1000000)}`,
               uraian,
               qty: 1,
               satuan,
@@ -538,7 +557,7 @@ export default function BulkImportTab({
     reader.onload = (e) => {
       try {
         const data = e.target?.result;
-        const workbook = XLSX.read(data, { type: 'binary' });
+        const workbook = XLSX.read(data, { type: 'binary', cellDates: true });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
         const jsonRows = XLSX.utils.sheet_to_json(sheet);
