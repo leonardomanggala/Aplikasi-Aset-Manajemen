@@ -271,8 +271,11 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
     ...stats.bidangDistribution.map(item => Number(item.value) || 0),
     1
   );
-  const maxCategoryOriginalValue = Math.max(
-    ...stats.categoryDistribution.map(item => Number(item.originalValue) || 0),
+  const maxCategoryValue = Math.max(
+    ...stats.categoryDistribution.flatMap(item => [
+      Number(item.originalValue) || 0,
+      Number(item.bookValue) || 0
+    ]),
     1
   );
 
@@ -359,8 +362,8 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
             {stats.categoryDistribution
               .filter(item => item.originalValue > 0 || item.bookValue > 0)
               .map((item) => {
-                const originalWidth = item.originalValue > 0 ? Math.max((item.originalValue / maxCategoryOriginalValue) * 100, 2) : 0;
-                const bookWidth = item.bookValue > 0 ? Math.max((item.bookValue / maxCategoryOriginalValue) * 100, 2) : 0;
+                const originalWidth = item.originalValue > 0 ? Math.max((item.originalValue / maxCategoryValue) * 100, 2) : 0;
+                const bookWidth = item.bookValue > 0 ? Math.max((item.bookValue / maxCategoryValue) * 100, 2) : 0;
                 return (
                   <div key={item.category} className="space-y-1.5">
                     <div className="flex items-center justify-between gap-3 text-[11px]">
@@ -373,12 +376,14 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                         <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
                           <div className="h-full rounded-full bg-slate-300 transition-all duration-500" style={{ width: `${originalWidth}%` }} />
                         </div>
+                        <span className="w-24 shrink-0 text-right text-[9px] font-medium text-slate-500 whitespace-nowrap">{formatRupiah(item.originalValue)}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="w-14 shrink-0 text-[9px] text-primary-500">Nilai Buku</span>
                         <div className="h-2 w-full rounded-full bg-primary-50 overflow-hidden">
                           <div className="h-full rounded-full bg-primary-500 transition-all duration-500" style={{ width: `${bookWidth}%` }} />
                         </div>
+                        <span className="w-24 shrink-0 text-right text-[9px] font-semibold text-primary-600 whitespace-nowrap">{formatRupiah(item.bookValue)}</span>
                       </div>
                     </div>
                   </div>
