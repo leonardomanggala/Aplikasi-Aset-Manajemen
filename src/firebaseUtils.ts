@@ -2,9 +2,24 @@ import { db } from './firebase';
 import { collection, doc, setDoc, updateDoc, getDocs, getDoc, writeBatch, onSnapshot, deleteField } from 'firebase/firestore';
 import { Asset, User } from './types';
 
+// Firestore rejects `undefined` values. Bulk imports intentionally leave
+// several optional fields empty, so sanitize nested records before every write
+// instead of failing the entire batch.
+const removeUndefined = (value: any): any => {
+  if (Array.isArray(value)) return value.map(removeUndefined);
+  if (value && typeof value === 'object' && !(value instanceof Date)) {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([, nestedValue]) => nestedValue !== undefined)
+        .map(([key, nestedValue]) => [key, removeUndefined(nestedValue)])
+    );
+  }
+  return value;
+};
+
 export const saveAssetToFirebase = async (asset: Asset) => {
   const assetRef = doc(db, 'assets', asset.id);
-  await setDoc(assetRef, asset);
+  await setDoc(assetRef, removeUndefined(asset));
 };
 
 export const deleteAssetFromFirebase = async (assetId: string) => {
@@ -35,7 +50,7 @@ export const syncAllAssetsToFirebase = async (assets: Asset[]) => {
     const batch = writeBatch(db);
     chunk.forEach((asset) => {
       const assetRef = doc(db, 'assets', asset.id);
-      batch.set(assetRef, asset);
+      batch.set(assetRef, removeUndefined(asset));
     });
     await batch.commit();
   }
@@ -67,7 +82,7 @@ export const syncAllUsersToFirebase = async (users: User[]) => {
   const batch = writeBatch(db);
   users.forEach((user) => {
     const userRef = doc(db, 'users', user.id);
-    batch.set(userRef, user);
+    batch.set(userRef, removeUndefined(user));
   });
   await batch.commit();
 };
