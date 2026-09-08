@@ -108,9 +108,11 @@ export default function App() {
     });
   });
   const localAssetsCache = useRef<Asset[]>(assets);
+  const hasPersistedLocalAssets = useRef(Boolean(localStorage.getItem('sim_aset_paroki_data')));
   // Prevent intermediate Firestore snapshots from replacing the UI while a
   // multi-batch import is being committed and verified.
   const isImportingAssets = useRef(false);
+  const isBootstrappingAssets = useRef(true);
   const ignoreAssetSnapshotsUntil = useRef(0);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -121,7 +123,11 @@ export default function App() {
     let masterDataInit = false;
 
     const unsubAssets = subscribeToAssets((remoteAssets) => {
-      if (isImportingAssets.current || Date.now() < ignoreAssetSnapshotsUntil.current) {
+      if (
+        isImportingAssets.current ||
+        Date.now() < ignoreAssetSnapshotsUntil.current ||
+        (isBootstrappingAssets.current && hasPersistedLocalAssets.current && remoteAssets.length < localAssetsCache.current.length)
+      ) {
         return;
       }
       // Hindari mengosongkan UI ketika snapshot kosong sementara datang saat
@@ -260,16 +266,26 @@ export default function App() {
 
     Promise.all([getAllAssetsFromFirebase(), getAllUsersFromFirebase()])
       .then(async ([remoteAssets, remoteUsers]) => {
-        const tasks: Promise<unknown>[] = [];
-        if (remoteAssets.length < localAssetsCache.current.length) {
-          tasks.push(syncAllAssetsToFirebase(localAssetsCache.current));
+        try {
+          const tasks: Promise<unknown>[] = [];
+          // Only restore from a deliberate local cache. Never upload the
+          // built-in demo dataset over a smaller, valid cloud dataset.
+          if (hasPersistedLocalAssets.current && remoteAssets.length < localAssetsCache.current.length) {
+            isImportingAssets.current = true;
+            tasks.push(syncAllAssetsToFirebase(localAssetsCache.current));
+          }
+          if (remoteUsers.length < localUsersCache.current.length) {
+            tasks.push(syncAllUsersToFirebase(localUsersCache.current));
+          }
+          await Promise.all(tasks);
+        } finally {
+          isImportingAssets.current = false;
+          isBootstrappingAssets.current = false;
         }
-        if (remoteUsers.length < localUsersCache.current.length) {
-          tasks.push(syncAllUsersToFirebase(localUsersCache.current));
-        }
-        await Promise.all(tasks);
       })
       .catch(error => {
+        isImportingAssets.current = false;
+        isBootstrappingAssets.current = false;
         console.error('Gagal menyamakan cache lokal dengan database cloud:', error);
       });
   }, [isLoading]);
