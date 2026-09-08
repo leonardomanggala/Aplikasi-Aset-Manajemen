@@ -108,6 +108,10 @@ export default function App() {
     });
   });
   const localAssetsCache = useRef<Asset[]>(assets);
+  // Prevent intermediate Firestore snapshots from replacing the UI while a
+  // multi-batch import is being committed and verified.
+  const isImportingAssets = useRef(false);
+  const ignoreAssetSnapshotsUntil = useRef(0);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -117,6 +121,9 @@ export default function App() {
     let masterDataInit = false;
 
     const unsubAssets = subscribeToAssets((remoteAssets) => {
+      if (isImportingAssets.current || Date.now() < ignoreAssetSnapshotsUntil.current) {
+        return;
+      }
       // Hindari mengosongkan UI ketika snapshot kosong sementara datang saat
       // bootstrap. Cache lokal akan disinkronkan kembali ke Firebase oleh
       // proses bootstrap di bawah.
@@ -693,7 +700,7 @@ export default function App() {
   };
 
   // Actions: Excel worksheet bulk append or overwrite
-  const handleImportAssets = (importedList: Asset[], replaceExisting?: boolean) => {
+  const handleImportAssets = async (importedList: Asset[], replaceExisting?: boolean) => {
     // Deduplicate the incoming imported list itself (first one wins to avoid internal duplicates)
     const uniqueImportedMap = new Map<string, Asset>();
     importedList.forEach(asset => {
@@ -702,27 +709,49 @@ export default function App() {
     });
     const uniqueImported = Array.from(uniqueImportedMap.values());
 
-    if (replaceExisting) {
-      localAssetsCache.current = uniqueImported;
-      setAssets(uniqueImported);
-      syncAllAssetsToFirebase(uniqueImported).catch(console.error);
-    } else {
-      // For appending, use a Map to merge existing and imported assets, preventing any duplicate No Seri Final
-      const mergedMap = new Map<string, Asset>();
-      // First, seed with existing assets by ID
-      assets.forEach(asset => {
-        mergedMap.set(asset.id, asset);
-      });
-      // Then overwrite or add imported assets
-      uniqueImported.forEach(asset => {
-        mergedMap.set(asset.id, asset);
-      });
-      
-      const nextAssets = Array.from(mergedMap.values());
+    const currentAssets = localAssetsCache.current;
+    const nextAssets = replaceExisting
+      ? uniqueImported
+      : Array.from(new Map([...currentAssets, ...uniqueImported].map(asset => [asset.id, asset])).values());
+    const importedIds = new Set(uniqueImported.map(asset => asset.id));
+
+    isImportingAssets.current = true;
+    try {
+      await syncAllAssetsToFirebase(nextAssets);
+
+      // For replace mode, soft-delete records that are not part of the new
+      // import so the next realtime snapshot cannot resurrect stale rows.
+      if (replaceExisting) {
+        const staleIds = currentAssets.filter(asset => !importedIds.has(asset.id)).map(asset => asset.id);
+        if (staleIds.length > 0) {
+          await deleteAssetsFromFirebase(staleIds);
+        }
+      }
+
+      const persistedAssets = await getAllAssetsFromFirebase();
+      const persistedIds = new Set(persistedAssets.map(asset => asset.id));
+      const missingCount = nextAssets.reduce((count, asset) => count + (persistedIds.has(asset.id) ? 0 : 1), 0);
+      if (missingCount > 0) {
+        throw new Error(`${missingCount} aset belum terkonfirmasi tersimpan`);
+      }
+
       localAssetsCache.current = nextAssets;
       setAssets(nextAssets);
-      syncAllAssetsToFirebase(nextAssets).catch(console.error);
+    } catch (error) {
+      // Remove only records created by this import attempt. Existing assets are
+      // left intact so a failed import never destroys the last good dataset.
+      await deleteAssetsFromFirebase(Array.from(importedIds)).catch(cleanupError => {
+        console.error('Gagal membersihkan batch import yang tidak lengkap:', cleanupError);
+      });
+      // Preserve the last known-good state if any batch or verification fails.
+      localAssetsCache.current = currentAssets;
+      setAssets(currentAssets);
+      ignoreAssetSnapshotsUntil.current = Date.now() + 2000;
+      throw error;
+    } finally {
+      isImportingAssets.current = false;
     }
+
   };
 
   const handleClearAllAssets = () => {

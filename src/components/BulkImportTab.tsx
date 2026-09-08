@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 
 interface BulkImportTabProps {
-  onImportAssets: (importedAssets: Asset[], replaceExisting?: boolean) => void;
+  onImportAssets: (importedAssets: Asset[], replaceExisting?: boolean) => Promise<void>;
   onClearAllAssets: () => void;
   assetsLength: number;
   existingAssets?: Asset[];
@@ -204,13 +204,14 @@ export default function BulkImportTab({
     return undefined;
   };
 
-  const processRows = (rows: any[]) => {
+  const processRows = async (rows: any[]) => {
     setLoading(true);
     setErrorMessage('');
     
-    // Simulate slight delay for professional telemetry
-    setTimeout(() => {
-      try {
+    // Keep the preview responsive without allowing an un-awaited import to race
+    // with the realtime Firestore listener.
+    await new Promise(resolve => setTimeout(resolve, 300));
+    try {
         let successCount = 0;
         let failedCount = 0;
         const validAssets: Asset[] = [];
@@ -521,7 +522,7 @@ export default function BulkImportTab({
         }
 
         if (validAssets.length > 0) {
-          onImportAssets(validAssets, replaceExisting);
+          await onImportAssets(validAssets, replaceExisting);
         }
 
         setResults({
@@ -532,13 +533,12 @@ export default function BulkImportTab({
           failedItems: failedItems
         });
 
-      } catch (err: any) {
+    } catch (err: any) {
         console.error(err);
-        setErrorMessage(`Terjadi kegagalan mengurai format: ${err.message || 'Struktur Excel tidak kompatibel'}`);
-      } finally {
-        setLoading(false);
-      }
-    }, 1200);
+        setErrorMessage(`Import gagal disimpan: ${err.message || 'Database tidak dapat dikonfirmasi'}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Click file processing handle
@@ -807,7 +807,7 @@ export default function BulkImportTab({
           <div className="mt-6 flex flex-col items-center justify-center py-4 text-center space-y-2">
             <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
             <div className="text-xs font-semibold text-slate-600">
-              Sedang mengurai dan memvalidasi model relasi database paroki...
+              Sedang menyimpan seluruh batch dan memverifikasi data di cloud...
             </div>
           </div>
         )}
@@ -831,7 +831,7 @@ export default function BulkImportTab({
                 <div>
                   <span className="text-[10px] text-primary-600 font-bold uppercase block">Berhasil Diimpor</span>
                   <span className="text-xl font-bold font-mono text-primary-800">{results.success} unit</span>
-                  <p className="text-[10px] text-primary-700 mt-0.5">Nilai buku & Seri-Final terbuat sempurna.</p>
+                  <p className="text-[10px] text-primary-700 mt-0.5">Seluruh batch tersimpan dan sudah diverifikasi di cloud.</p>
                 </div>
               </div>
 
@@ -932,7 +932,7 @@ export default function BulkImportTab({
           {results && (
             <>
               <div className="text-primary-400">[PARSER] Excel parsed rows successfully: {results.items.length + results.failed} items found.</div>
-              <div className="text-primary-400">[DB] Appended {results.success} elements into state. State size: {assetsLength} items.</div>
+              <div className="text-primary-400">[DB] {results.success} elemen tersimpan dan terverifikasi. State size: {assetsLength} items.</div>
               <div>[INFO] Recalculating Straight-line book values using days resolution coeff 365.25 [10]. Done.</div>
             </>
           )}
