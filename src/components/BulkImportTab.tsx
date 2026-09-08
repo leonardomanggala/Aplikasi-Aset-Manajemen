@@ -301,16 +301,20 @@ export default function BulkImportTab({
           if (rawSerialCode && typeof rawSerialCode === 'string') {
             const cleanSerial = rawSerialCode.trim();
             if (cleanSerial.includes('-')) {
-              // New template layout: 403-2020-1-8-1-17-001 (7 segments)
+              // Canonical layout: 403-2020-01-01-06-01-453
               const parts = cleanSerial.split('-');
               if (parts.length >= 7) {
                 parsedJenisAset = parts[0];
                 parsedTahun = Number(parts[1]) || undefined;
                 parsedTeritori = parts[2];
-                parsedLetakRuang = parts[3];
-                parsedPeruntukan = parts[4];
-                parsedKodeNamaBarang = parts[5];
-                if (!parsedKodeNamaBarang) parsedKodeNamaBarang = parts[6];
+                parsedPeruntukan = parts[3];
+                parsedLetakRuang = parts[4];
+                parsedKodeNamaBarang = parts[6];
+                // Preserve the explicit sequence segment when no column value
+                // is provided in the import row.
+                if (!getFlexibleValue(row, ['noUrutSejenis', 'noUrut', 'urut', 'sequenceNumber', 'seq', 'nomorurut'])) {
+                  row.noUrutSejenis = parts[5];
+                }
               } else if (parts.length === 6) {
                 parsedJenisAset = parts[0];
                 parsedTahun = Number(parts[1]) || undefined;

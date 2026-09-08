@@ -284,7 +284,7 @@ export function isAssetDepreciable(asset: Partial<Asset>): boolean {
 }
 
 // Automatically generate the church's canonical asset code:
-// [JENIS_ASET]-[TAHUN]-[TERITORI]-[LETAK_RUANG]-[PERUNTUKAN]-[KODE_NAMA_BARANG]
+// [JENIS_ASET]-[TAHUN]-[TERITORI]-[PERUNTUKAN]-[LETAK_RUANG]-[NO_URUT_SEJENIS]-[KODE_NAMA_BARANG]
 export function generateNoSeriFinal(asset: Partial<Asset>): string {
   const jenis = asset.jenisAset || "403";
   
@@ -297,9 +297,10 @@ export function generateNoSeriFinal(asset: Partial<Asset>): string {
   const teri = String(asset.teritori || "01").padStart(2, '0');
   const ruang = String(asset.letakRuang || "02").padStart(2, '0');
   const peruntukan = String(asset.peruntukan || "01").padStart(2, '0');
+  const noUrut = String(asset.noUrutSejenis || "1").padStart(2, '0');
   const kodeBarang = asset.kodeNamaBarang || "17";
 
-  return `${jenis}-${tahun}-${teri}-${ruang}-${peruntukan}-${kodeBarang}`;
+  return `${jenis}-${tahun}-${teri}-${peruntukan}-${ruang}-${noUrut}-${kodeBarang}`;
 }
 
 // Generate human-readable string for QR Code scanner payload
