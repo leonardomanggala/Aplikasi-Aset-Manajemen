@@ -71,7 +71,7 @@ h1, h2, h3, h4, .font-display {
 .simas-sidebar .text-white,
 .simas-sidebar .text-slate-300,
 .simas-sidebar .text-slate-400 {
-  color: #cbd5e1 !important;
+  color: #ffffff !important;
 }
 .simas-sidebar .text-slate-500 { color: #94a3b8 !important; }
 .simas-sidebar .hover\:bg-slate-800\/50:hover,
@@ -80,10 +80,31 @@ h1, h2, h3, h4, .font-display {
   color: #f8fafc !important;
 }
 .simas-sidebar .bg-primary-500\/10 {
-  background: #dcfce7 !important;
+  background: #11df5b !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgb(17 223 91 / .22) !important;
 }
 .simas-sidebar .bg-primary-500\/10 .text-primary-400,
-.simas-sidebar .bg-primary-500\/10 .text-primary-500 { color: #15803d !important; }
+.simas-sidebar .bg-primary-500\/10 .text-primary-500 { color: #ffffff !important; }
+
+/* Sidebar navigation contrast: solid white labels and a clear neon-green
+   active state, including the nested asset category buttons. */
+.simas-sidebar nav > button,
+.simas-sidebar nav .space-y-1 > button,
+.simas-sidebar nav .space-y-1 .overflow-hidden button {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+.simas-sidebar nav button[class*="bg-primary-500/10"],
+.simas-sidebar nav button[class*="bg-[#064e3b]"] {
+  background: #11df5b !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgb(17 223 91 / .22) !important;
+}
+.simas-sidebar nav button[class*="bg-primary-500/10"] svg,
+.simas-sidebar nav button[class*="bg-[#064e3b]"] svg {
+  color: #ffffff !important;
+}
 .simas-sidebar .ring-primary-500\/30 {
   --tw-ring-color: rgb(34 197 94 / .35) !important;
 }
