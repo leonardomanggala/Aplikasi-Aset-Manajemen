@@ -405,7 +405,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
             <div className="max-h-[28rem] overflow-y-auto pr-1 space-y-3 mt-2">
               {stats.bidangDistribution.map((item, index) => {
                 const width = item.value > 0 ? Math.max((item.value / maxBidangBookValue) * 100, 2) : 0;
-                const colors = ['#7c3aed', '#8b5cf6', '#10b981', '#0ea5e9', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'];
+                const colors = ['#11df5b', '#22c55e', '#10b981', '#0ea5e9', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'];
                 return (
                   <div key={item.bidang} className="space-y-1.5">
                     <div className="flex items-center justify-between gap-3 text-[11px]">
@@ -504,7 +504,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                     {stats.categoryDistribution.filter(c => c.bookValue > 0).map((entry, index) => (
                       <Cell 
                         key={entry.category} 
-                        fill={['#7c3aed', '#8b5cf6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#a855f7', '#c084fc', '#f43f5e', '#f59e0b'][index % 10]}
+                        fill={['#11df5b', '#22c55e', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#86efac', '#4ade80', '#f43f5e', '#f59e0b'][index % 10]}
                       />
                     ))}
                   </Pie>
@@ -522,7 +522,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                 return (
                   <div key={item.category} className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2 max-w-[70%]">
-                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: ['#7c3aed', '#8b5cf6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#a855f7', '#c084fc', '#f43f5e', '#f59e0b'][index % 10] }}></span>
+                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: ['#11df5b', '#22c55e', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#86efac', '#4ade80', '#f43f5e', '#f59e0b'][index % 10] }}></span>
                       <span className="text-slate-600 font-medium truncate" title={item.category}>{item.category}</span>
                     </div>
                     <span className="font-semibold text-slate-800 font-mono">{percentage}%</span>
