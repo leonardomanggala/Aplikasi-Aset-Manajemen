@@ -92,7 +92,7 @@ export interface Asset {
   peruntukan: string;       // Level 4 code (e.g. "01" - Gereja Paroki)
   letakRuang: string;       // Level 5 code (e.g. "02" - Panti Imam, "08" - R. Komsos, "09" - Sekretariat)
   noUrutSejenis: string;    // Level 6 code (e.g. "001", "002")
-  kodeNamaBarang: string;    // Level 7 code (e.g. "1" - CPU, "101" - Tensimeter)
+  kodeNamaBarang: string;    // Level 7 Kode Barang (e.g. "1" - CPU, "101" - Tensimeter)
   noSeriFinal: string;      // Formatted automatic unique serial: jenisAset.teritori.peruntukan.letakRuang.kodeNamaBarang.noUrutSejenis
   umurManfaat: number;      // elements in years
   nilaiResidu: number;

@@ -240,7 +240,7 @@ export default function MasterDataTab({
       case 'teritori': return 'Level 3: Teritori';
       case 'ruang': return 'Level 5: Letak Ruang';
       case 'peruntukan': return 'Level 4: Peruntukan';
-      case 'kodeBarang': return 'Level 7: Kode Nama Barang';
+      case 'kodeBarang': return 'Level 7: Kode Barang';
       case 'bidang': return 'Bidang / Fungsi Terkoordinasi';
     }
   })();
@@ -616,7 +616,7 @@ export default function MasterDataTab({
           }`}
         >
           <Tag className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Level 7: </span>Nama Barang
+          <span className="hidden sm:inline">Level 7: </span>Kode Barang
         </button>
 
         <button
@@ -864,9 +864,9 @@ export default function MasterDataTab({
             <p className="leading-relaxed">
               Standardisasi nomor seri visual paroki diturunkan dari segmen hirarkal: 
               <span className="block mt-1 bg-white p-1.5 rounded font-mono text-[9px] border border-primary-100 text-slate-500">
-                [JenisAset]-[Tahun]-[Teritori]-[LetakRuang]-[Peruntukan]-[KodeNamaBarang]
+                [JenisAset]-[Tahun]-[Teritori]-[Peruntukan]-[LetakRuang]-[NoUrutSejenis]-[KodeBarang]
               </span>
-              Misalnya, kode <strong>403-2020-1-8-1-17</strong> mengindikasikan Jenis Aset <strong>403</strong> (Peralatan Elektronik), diperoleh tahun <strong>2020</strong>, ditempatkan di Teritori <strong>1</strong> (Paroki), tepatnya Letak Ruang <strong>8</strong> (Gudang/Ruang Liturgi), diperuntukkan bagi <strong>1</strong> (Gereja Utama), dengan Kode Nama Barang <strong>17</strong>.
+              Misalnya, kode <strong>403-2020-01-01-06-01-17</strong> mengindikasikan Jenis Aset <strong>403</strong> (Peralatan Elektronik), diperoleh tahun <strong>2020</strong>, ditempatkan di Teritori <strong>01</strong> (Paroki), diperuntukkan bagi <strong>01</strong> (Gereja Utama), tepatnya Letak Ruang <strong>06</strong>, dengan nomor urut barang sejenis <strong>01</strong> dan Kode Barang <strong>17</strong>. Nama barang tetap ditampilkan bersama kodenya pada daftar pilihan.
             </p>
           </div>
         </div>

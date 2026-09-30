@@ -1297,7 +1297,7 @@ export default function AssetListTab({
 
               {/* Kode Barang (Auto Urut) */}
               <div className="space-y-1">
-                <label className="text-xs text-slate-500 font-bold block uppercase tracking-wide">Level 7 - Nama Barang (Kode)</label>
+                <label className="text-xs text-slate-500 font-bold block uppercase tracking-wide">Level 7 - Kode Barang</label>
                 <select
                   value={formData.kodeNamaBarang}
                   onChange={(e) => setFormData({...formData, kodeNamaBarang: e.target.value})}

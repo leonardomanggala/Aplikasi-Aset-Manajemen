@@ -793,7 +793,7 @@ export default function AssetModal({
               <div className="flex items-center gap-1.5">
                 <Tag className="w-4 h-4 text-slate-400 shrink-0" />
                 <div>
-                  <span className="text-slate-400 text-[10px] block font-semibold uppercase leading-none">Level 7 - Nama Identitas Barang</span>
+                  <span className="text-slate-400 text-[10px] block font-semibold uppercase leading-none">Level 7 - Kode Barang</span>
                   <span className="text-slate-700 font-medium leading-normal">[{asset.kodeNamaBarang}] {kMap[asset.kodeNamaBarang] || 'Tidak Diketahui / Lainnya'}</span>
                 </div>
               </div>
