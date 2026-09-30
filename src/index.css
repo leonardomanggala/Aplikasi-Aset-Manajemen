@@ -96,10 +96,15 @@ h1, h2, h3, h4, .font-display {
   font-weight: 700 !important;
 }
 .simas-sidebar nav button[class*="bg-primary-500/10"],
-.simas-sidebar nav button[class*="bg-[#003b8f]"] {
+.simas-sidebar nav button[class*="bg-primary-500/10"] {
   background: #005ce2 !important;
   color: #ffffff !important;
   box-shadow: 0 10px 24px rgb(0 92 226 / .25) !important;
+}
+.simas-sidebar nav button[class*="bg-[#003b8f]"] {
+  background: #0a2f66 !important;
+  color: #dbeafe !important;
+  box-shadow: inset 3px 0 0 #60a5fa, 0 6px 16px rgb(0 30 90 / .28) !important;
 }
 .simas-sidebar nav button[class*="bg-primary-500/10"] svg,
 .simas-sidebar nav button[class*="bg-[#003b8f]"] svg {
