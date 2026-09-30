@@ -15,9 +15,7 @@ import {
   Cell,
   Legend,
   LineChart,
-  Line,
-  BarChart,
-  Bar
+  Line
 } from 'recharts';
 import {
   Asset,
@@ -269,6 +267,10 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
     };
   }, [assets, activeJenisAsetMap]);
 
+  const maxBidangBookValue = Math.max(
+    ...stats.bidangDistribution.map(item => Number(item.value) || 0),
+    1
+  );
   const maxCategoryValue = Math.max(
     ...stats.categoryDistribution.flatMap(item => [
       Number(item.originalValue) || 0,
@@ -400,41 +402,22 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Distribusi Nilai Aset per Bidang</h3>
               <p className="text-xs text-slate-400 mb-4">Total nilai buku berdasarkan bidang fungsional</p>
             </div>
-            <div className="h-[28rem] overflow-y-auto pr-1 mt-2">
-              <ResponsiveContainer width="100%" height={Math.max(320, stats.bidangDistribution.length * 42)}>
-                <BarChart
-                  data={stats.bidangDistribution}
-                  layout="vertical"
-                  margin={{ top: 8, right: 18, left: 4, bottom: 8 }}
-                >
-                  <CartesianGrid horizontal={false} stroke="#e2e8f0" strokeDasharray="3 3" />
-                  <XAxis
-                    type="number"
-                    tick={{ fontSize: 10, fill: '#64748b' }}
-                    tickFormatter={(value) => `${Math.round(Number(value) / 1000000)} jt`}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <YAxis
-                    type="category"
-                    dataKey="bidang"
-                    width={112}
-                    tick={{ fontSize: 10, fill: '#334155' }}
-                    tickFormatter={(value) => truncateChartLabel(String(value), 18)}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <Tooltip
-                    formatter={(value: number) => [formatRupiah(Number(value)), 'Nilai Buku']}
-                    contentStyle={{ borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 11 }}
-                  />
-                  <Bar dataKey="value" name="Nilai Buku" radius={[0, 6, 6, 0]} fill="#005ce2" barSize={18}>
-                    {stats.bidangDistribution.map((entry, index) => (
-                      <Cell key={`bidang-${entry.bidang}`} fill={index === 0 ? '#005ce2' : '#3b82f6'} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="max-h-[28rem] overflow-y-auto pr-1 space-y-3 mt-2">
+              {stats.bidangDistribution.map((item, index) => {
+                const width = item.value > 0 ? Math.max((item.value / maxBidangBookValue) * 100, 2) : 0;
+                const colors = ['#005ce2', '#3b82f6', '#2563eb', '#0ea5e9', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'];
+                return (
+                  <div key={item.bidang} className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-3 text-[11px]">
+                      <span className="font-semibold text-slate-700 truncate" title={item.bidang}>{item.bidang}</span>
+                      <span className="font-mono font-bold text-slate-600 whitespace-nowrap">{formatRupiah(item.value)}</span>
+                    </div>
+                    <div className="h-2.5 w-full rounded-full bg-slate-100 overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-500" style={{ width: `${width}%`, backgroundColor: colors[index % colors.length] }} />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
