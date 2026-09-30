@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import { User, Asset, JENIS_ASET_MAP, LETAK_RUANG_MAP, TERITORI_MAP, PERUNTUKAN_MAP, KODE_NAMA_BARANG_MAP, generateNoSeriFinal, getCanonicalRole } from '../types';
 import { syncAllAssetsToFirebase, updateMasterDataAtomic, syncMasterDataToFirebase } from '../firebaseUtils';
@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 
 import { BIDANG_MAP } from '../types';
+import TablePagination from './TablePagination';
 
 interface MasterDataTabProps {
   currentUser: User;
@@ -71,6 +72,12 @@ export default function MasterDataTab({
   // Navigation tabs for the Master Data categories
   const [subTab, setSubTab] = useState<'jenis' | 'teritori' | 'ruang' | 'peruntukan' | 'kodeBarang' | 'bidang'>('jenis');
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [subTab, searchQuery, itemsPerPage]);
 
   // Editor form states
   const [editingCode, setEditingCode] = useState<string | null>(null); // Under edit if not null
@@ -276,6 +283,13 @@ export default function MasterDataTab({
     return code.toLowerCase().includes(searchQuery.toLowerCase()) || 
            name.toLowerCase().includes(searchQuery.toLowerCase());
   }).sort((a, b) => a[0].localeCompare(b[0])); // Sorted by code
+
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / itemsPerPage));
+  const activePage = Math.min(currentPage, totalPages);
+  const paginatedItems = useMemo(() => {
+    const start = (activePage - 1) * itemsPerPage;
+    return filteredItems.slice(start, start + itemsPerPage);
+  }, [filteredItems, activePage, itemsPerPage]);
 
   // Handle setting text inside editor fields
   const handleStartEdit = (code: string, name: string) => {
@@ -685,7 +699,7 @@ export default function MasterDataTab({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 bg-white">
-                    {filteredItems.map(([code, name]) => {
+                    {paginatedItems.map(([code, name]) => {
                       const count = getUsageCount(code);
                       return (
                         <tr key={code} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition duration-150">
@@ -740,10 +754,16 @@ export default function MasterDataTab({
               )}
             </div>
 
-            {/* Display count footer info */}
-            <div className="p-4 border-t border-slate-100 bg-slate-50 text-[11px] text-slate-400 font-mono flex justify-between items-center">
-              <span>Menampilkan {filteredItems.length} referensi standar.</span>
-              <span>Dikonfigurasi {Object.keys(currentMap).length} total.</span>
+            <TablePagination
+              page={activePage}
+              totalItems={filteredItems.length}
+              pageSize={itemsPerPage}
+              onPageChange={setCurrentPage}
+              onPageSizeChange={setItemsPerPage}
+            />
+            <div className="px-4 pb-3 bg-slate-50 text-[10px] text-slate-400 font-mono flex justify-between items-center">
+              <span>Referensi terfilter: {filteredItems.length}.</span>
+              <span>Total dikonfigurasi: {Object.keys(currentMap).length}.</span>
             </div>
           </div>
         </div>

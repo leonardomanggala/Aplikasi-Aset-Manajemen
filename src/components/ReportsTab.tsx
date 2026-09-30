@@ -4,6 +4,7 @@ import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { Download, FileSpreadsheet, FileText, Filter, RotateCcw, Search } from 'lucide-react';
 import { Asset, BIDANG_MAP, JENIS_ASET_MAP, LETAK_RUANG_MAP, KondisiBarang, formatRupiah } from '../types';
+import TablePagination from './TablePagination';
 
 interface ReportsTabProps {
   assets: Asset[];
@@ -46,6 +47,12 @@ export default function ReportsTab({ assets, jenisAsetMap, letakRuangMap, bidang
   const [conditionFilter, setConditionFilter] = useState('ALL');
   const [yearFilter, setYearFilter] = useState('ALL');
   const [categoryFilter, setCategoryFilter] = useState('ALL');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, roomFilter, bidangFilter, jenisFilter, conditionFilter, yearFilter, categoryFilter, itemsPerPage]);
 
   const options = useMemo(() => ({
     rooms: [...new Set(assets.map(asset => asset.letakRuang).filter(Boolean))].sort(),
@@ -104,6 +111,9 @@ export default function ReportsTab({ assets, jenisAsetMap, letakRuangMap, bidang
     accumulatedDepreciation: Math.max(0, (Number(asset.hargaPembelian) || 0) - (Number(asset.nilaiBuku) || 0)),
     bookValue: Number(asset.nilaiBuku) || 0
   }));
+  const totalPages = Math.max(1, Math.ceil(reportRows.length / itemsPerPage));
+  const activePage = Math.min(currentPage, totalPages);
+  const paginatedRows = reportRows.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage);
 
   const handleExportExcel = () => {
     const rows = reportRows.map(row => ({
@@ -213,10 +223,11 @@ export default function ReportsTab({ assets, jenisAsetMap, letakRuangMap, bidang
         <div className="overflow-x-auto">
           <table className="min-w-[1120px] w-full text-xs">
             <thead className="bg-slate-50 text-slate-500 uppercase tracking-wide text-[10px]"><tr>{['No', 'Kode Aset', 'Uraian / Penempatan', 'Tgl Perolehan', 'Jenis Aset', 'Lokasi', 'Bidang', 'Kondisi', 'Harga Perolehan', 'Akum. Penyusutan', 'Nilai Buku'].map(header => <th key={header} className="px-3 py-3 text-left font-bold">{header}</th>)}</tr></thead>
-            <tbody className="divide-y divide-slate-100">{reportRows.slice(0, 100).map(row => <tr key={`${row.kode}-${row.no}`} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition duration-150"><td className="px-3 py-3 text-slate-400">{row.no}</td><td className="px-3 py-3 font-semibold text-primary-600 whitespace-nowrap">{row.kode}</td><td className="px-3 py-3 min-w-[220px]"><div className="font-semibold text-slate-800">{row.uraian}</div><div className="text-[10px] text-slate-400">{row.qty} {row.satuan}</div></td><td className="px-3 py-3 whitespace-nowrap text-slate-600">{row.tanggal}</td><td className="px-3 py-3 min-w-[150px] text-slate-600">{row.kategori}</td><td className="px-3 py-3 min-w-[120px] text-slate-600">{row.lokasi}</td><td className="px-3 py-3 min-w-[120px] text-slate-600">{row.bidang}</td><td className="px-3 py-3 whitespace-nowrap"><span className={`px-2 py-1 rounded-full text-[10px] font-semibold ${row.kondisi === 'Baik' ? 'bg-emerald-100 text-emerald-700' : row.kondisi === 'Rusak Ringan' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}`}>{row.kondisi}</span></td><td className="px-3 py-3 text-right whitespace-nowrap text-slate-700">{formatRupiah(row.acquisition)}</td><td className="px-3 py-3 text-right whitespace-nowrap text-slate-700">{formatRupiah(row.accumulatedDepreciation)}</td><td className="px-3 py-3 text-right whitespace-nowrap font-semibold text-slate-800">{formatRupiah(row.bookValue)}</td></tr>)}</tbody>
+            <tbody className="divide-y divide-slate-100">{paginatedRows.map(row => <tr key={`${row.kode}-${row.no}`} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition duration-150"><td className="px-3 py-3 text-slate-400">{row.no}</td><td className="px-3 py-3 font-semibold text-primary-600 whitespace-nowrap">{row.kode}</td><td className="px-3 py-3 min-w-[220px]"><div className="font-semibold text-slate-800">{row.uraian}</div><div className="text-[10px] text-slate-400">{row.qty} {row.satuan}</div></td><td className="px-3 py-3 whitespace-nowrap text-slate-600">{row.tanggal}</td><td className="px-3 py-3 min-w-[150px] text-slate-600">{row.kategori}</td><td className="px-3 py-3 min-w-[120px] text-slate-600">{row.lokasi}</td><td className="px-3 py-3 min-w-[120px] text-slate-600">{row.bidang}</td><td className="px-3 py-3 whitespace-nowrap"><span className={`px-2 py-1 rounded-full text-[10px] font-semibold ${row.kondisi === 'Baik' ? 'bg-emerald-100 text-emerald-700' : row.kondisi === 'Rusak Ringan' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}`}>{row.kondisi}</span></td><td className="px-3 py-3 text-right whitespace-nowrap text-slate-700">{formatRupiah(row.acquisition)}</td><td className="px-3 py-3 text-right whitespace-nowrap text-slate-700">{formatRupiah(row.accumulatedDepreciation)}</td><td className="px-3 py-3 text-right whitespace-nowrap font-semibold text-slate-800">{formatRupiah(row.bookValue)}</td></tr>)}</tbody>
           </table>
         </div>
-        {filteredAssets.length > 100 && <div className="px-4 py-3 text-[11px] text-slate-500 border-t border-slate-100">Tabel menampilkan 100 baris pertama. Ekspor PDF/Excel memuat seluruh hasil filter.</div>}
+        <TablePagination page={activePage} totalItems={reportRows.length} pageSize={itemsPerPage} onPageChange={setCurrentPage} onPageSizeChange={setItemsPerPage} />
+        <div className="px-4 pb-3 text-[10px] text-slate-500">Ekspor PDF/Excel tetap memuat seluruh hasil filter.</div>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { User, Role, Asset, JENIS_ASET_MAP, TERITORI_MAP, PERUNTUKAN_MAP, LETAK_RUANG_MAP, KODE_NAMA_BARANG_MAP, getCanonicalRole, ROLE_LABELS } from '../types';
 import { 
   User as UserIcon, 
@@ -24,6 +24,7 @@ import {
   Church,
   Upload
 } from 'lucide-react';
+import TablePagination from './TablePagination';
 
 interface AccountSettingsTabProps {
   currentUser: User;
@@ -68,6 +69,16 @@ export default function AccountSettingsTab({
   const [userSuccessMsg, setUserSuccessMsg] = useState('');
   const [userErrorMsg, setUserErrorMsg] = useState('');
   const [deleteUserRef, setDeleteUserRef] = useState<{ id: string; name: string } | null>(null);
+  const [usersPage, setUsersPage] = useState(1);
+  const [usersPageSize, setUsersPageSize] = useState(10);
+
+  useEffect(() => {
+    setUsersPage(page => Math.min(page, Math.max(1, Math.ceil(users.length / usersPageSize))));
+  }, [users.length, usersPageSize]);
+
+  const usersTotalPages = Math.max(1, Math.ceil(users.length / usersPageSize));
+  const activeUsersPage = Math.min(usersPage, usersTotalPages);
+  const paginatedUsers = users.slice((activeUsersPage - 1) * usersPageSize, activeUsersPage * usersPageSize);
 
   const handleAddUserSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -669,7 +680,7 @@ export default function AccountSettingsTab({
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 font-sans" id="operators-list-table">
-                      {users.map(u => {
+                      {paginatedUsers.map(u => {
                         const isSelf = u.id === currentUser.id;
                         const canonicalUserRole = getCanonicalRole(u.role);
                         
@@ -745,6 +756,13 @@ export default function AccountSettingsTab({
                       })}
                     </tbody>
                   </table>
+                  <TablePagination
+                    page={activeUsersPage}
+                    totalItems={users.length}
+                    pageSize={usersPageSize}
+                    onPageChange={setUsersPage}
+                    onPageSizeChange={size => { setUsersPageSize(size); setUsersPage(1); }}
+                  />
                 </div>
               </div>
 
