@@ -212,7 +212,7 @@ export default function AssetModal({
     ctx.textAlign = 'left';
 
     // Title / Uraian
-    ctx.fillStyle = '#0f172a'; // slate-900
+    ctx.fillStyle = '#141418';
     ctx.font = 'bold 16px "Inter", sans-serif';
     
     // Simple wrap text
@@ -296,7 +296,7 @@ export default function AssetModal({
               padding: 40px;
               font-family: 'Inter', sans-serif;
               background: #f8fafc;
-              color: #0f172a;
+              color: #141418;
               display: flex;
               justify-content: center;
               align-items: center;
@@ -349,7 +349,7 @@ export default function AssetModal({
               font-weight: 700;
               line-height: 1.3;
               margin: 0;
-              color: #0f172a;
+              color: #141418;
             }
             .serial-code {
               font-family: 'JetBrains Mono', monospace;

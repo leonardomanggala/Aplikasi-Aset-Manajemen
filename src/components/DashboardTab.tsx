@@ -453,7 +453,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                   </Pie>
                   <Tooltip 
                     formatter={(value: any) => [`${value} unit`, 'Jumlah Aset']}
-                    contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
+                    contentStyle={{ background: '#141418', border: 'none', borderRadius: '8px', color: '#fff' }}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -510,7 +510,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                   </Pie>
                   <Tooltip 
                     formatter={(value: any) => [formatRupiah(value), 'Nilai Buku']}
-                    contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '8px', color: '#fff' }}
+                    contentStyle={{ background: '#141418', border: 'none', borderRadius: '8px', color: '#fff' }}
                     itemStyle={{ color: '#fff' }}
                   />
                 </PieChart>

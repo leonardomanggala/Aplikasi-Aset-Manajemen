@@ -62,7 +62,7 @@ h1, h2, h3, h4, .font-display {
 .simas-sidebar .bg-slate-950,
 .simas-sidebar .bg-slate-900,
 .simas-sidebar .bg-slate-900\/50 {
-  background: #0f172a !important;
+  background: #141418 !important;
 }
 .simas-sidebar .border-slate-800\/50,
 .simas-sidebar .border-slate-800\/60 {
@@ -163,7 +163,7 @@ html.dark header {
 
 html.dark aside {
   background-color: #020617 !important; /* Deepest black for sidebar separation */
-  border-color: #0f172a !important;
+  border-color: #141418 !important;
 }
 
 html.dark footer {
@@ -176,7 +176,7 @@ html.dark .bg-white,
 html.dark .bg-slate-50,
 html.dark .bg-indigo-50\/50,
 html.dark .bg-primary-50\/50 {
-  background-color: #0f172a !important; /* Slate 900 card background */
+  background-color: #141418 !important; /* Dark card background */
 }
 
 /* Semi-transparent Slate 50s inside modals/cards should become Pitch dark or darker Slate */
@@ -187,7 +187,7 @@ html.dark .bg-slate-50\/60,
 html.dark .bg-slate-50\/70,
 html.dark .bg-slate-50\/80,
 html.dark .bg-slate-50\/90 {
-  background-color: #0b0f19 !important; /* Darker than modal background (#0f172a) */
+  background-color: #0b0f19 !important; /* Darker than modal background (#141418) */
 }
 
 /* Fixes for red/rose error tables */
@@ -251,7 +251,7 @@ html.dark textarea::placeholder {
   color: #64748b !important;
 }
 html.dark select option {
-  background-color: #0f172a !important;
+  background-color: #141418 !important;
   color: #ffffff !important;
 }
 
