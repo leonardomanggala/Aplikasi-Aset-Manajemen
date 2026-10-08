@@ -284,65 +284,71 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
         {/* Card 1: Total Units */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
-          <p className="text-[10px] font-bold text-slate-450 uppercase tracking-widest mb-1.5 flex items-center justify-between">
+        <div className="bg-[#0b43c6] p-4 rounded-xl border border-[#1b5be4] shadow-sm hover:shadow-md transition text-white">
+          <p className="text-[10px] font-bold text-white/90 uppercase tracking-widest mb-1.5 flex items-center justify-between">
             <span>Total Kuantitas</span>
-            <span className="text-primary-500 text-[10px] font-bold bg-primary-50 px-1.5 py-0.5 rounded">Aktif</span>
+            <span className="text-white/90 text-[10px] font-bold bg-white/10 border border-white/25 px-1.5 py-0.5 rounded">Aktif</span>
           </p>
           <div className="flex items-end justify-between">
-            <span className="text-2xl font-bold font-mono text-slate-900">{stats.totalUnits.toLocaleString('id-ID')}</span>
-            <span className="text-[10px] text-slate-400 font-medium">Unit Terdata</span>
+            <span className="text-2xl font-bold font-mono text-white">{stats.totalUnits.toLocaleString('id-ID')}</span>
+            <span className="text-[10px] text-white/75 font-medium">Unit Terdata</span>
           </div>
         </div>
 
         {/* Card 2: Original Cost */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
-          <p className="text-[10px] font-bold text-slate-450 uppercase tracking-widest mb-1.5">Nilai Perolehan</p>
+        <div className="bg-[#00b509] p-4 rounded-xl border border-[#12c61b] shadow-sm hover:shadow-md transition text-white">
+          <p className="text-[10px] font-bold text-white/90 uppercase tracking-widest mb-1.5 flex items-center justify-between">
+            <span>Nilai Perolehan</span>
+            <span className="text-white/90 text-[9px] font-bold bg-white/10 border border-white/25 px-1.5 py-0.5 rounded">Historis</span>
+          </p>
           <div className="flex items-end justify-between">
-            <span className="text-xl font-bold font-mono text-slate-900">{formatRupiah(stats.totalOriginalValue)}</span>
-            <span className="text-[10px] text-slate-400 font-semibold">Harga Awal</span>
+            <span className="text-xl font-bold font-mono text-white">{formatRupiah(stats.totalOriginalValue)}</span>
+            <span className="text-[10px] text-white/75 font-semibold">Harga Awal</span>
           </div>
         </div>
 
         {/* Card 3: Book Value */}
         <div 
           onClick={() => setActiveModal('bookValue')}
-          className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer"
+          className="bg-[#141418] p-4 rounded-xl border border-[#2d3340] shadow-sm hover:shadow-md transition cursor-pointer text-white"
         >
-          <p className="text-[10px] font-bold text-slate-450 uppercase tracking-widest mb-1.5 flex items-center justify-between">
+          <p className="text-[10px] font-bold text-white/75 uppercase tracking-widest mb-1.5 flex items-center justify-between">
             <span>Nilai Buku Saat Ini</span>
-            <span className="text-primary-500 text-[9px] font-bold bg-primary-50 px-1 py-0.2 rounded">Depresiasi</span>
+            <span className="text-blue-300 text-[9px] font-bold bg-blue-400/10 border border-blue-300/30 px-1.5 py-0.5 rounded">Depresiasi</span>
           </p>
           <div className="flex items-end justify-between">
-            <span className="text-xl font-bold font-mono text-primary-600">{formatRupiah(stats.totalBookValue)}</span>
-            <span className="text-[10px] text-slate-400 font-medium">Aktual</span>
+            <span className="text-xl font-bold font-mono text-[#4f9bff]">{formatRupiah(stats.totalBookValue)}</span>
+            <span className="text-[10px] text-white/65 font-medium">Aktual</span>
           </div>
         </div>
 
         {/* Card 4: Depreciation per year */}
         <div 
           onClick={() => setActiveModal('depreciation')}
-          className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer"
+          className="bg-[#b88600] p-4 rounded-xl border border-[#d19b00] shadow-sm hover:shadow-md transition cursor-pointer text-white"
         >
-          <p className="text-[10px] font-bold text-slate-450 uppercase tracking-widest mb-1.5">Penyusutan / Tahun</p>
+          <p className="text-[10px] font-bold text-white/90 uppercase tracking-widest mb-1.5 flex items-center justify-between">
+            <span>Penyusutan / Tahun</span>
+            <span className="text-white/90 text-[9px] font-bold bg-white/10 border border-white/25 px-1.5 py-0.5 rounded">Garis Lurus</span>
+          </p>
           <div className="flex items-end justify-between">
-            <span className="text-xl font-bold font-mono text-amber-600">{formatRupiah(stats.totalDepreciationYear)}</span>
-            <span className="text-[9px] text-slate-400 uppercase font-mono">Garis Lurus</span>
+            <span className="text-xl font-bold font-mono text-white">{formatRupiah(stats.totalDepreciationYear)}</span>
+            <span className="text-[9px] text-white/75 uppercase font-mono">Beban Tahun Ini</span>
           </div>
         </div>
 
         {/* Card 5: Damaged Assets */}
         <div 
           onClick={() => setActiveModal('damaged')}
-          className="bg-white p-4 rounded-xl border border-rose-200 bg-rose-50/30 shadow-sm hover:shadow-md transition cursor-pointer"
+          className="bg-[#f33d40] p-4 rounded-xl border border-[#ff686b] shadow-sm hover:shadow-md transition cursor-pointer text-white"
         >
-          <p className="text-[10px] font-bold text-rose-500 uppercase tracking-widest mb-1.5 flex items-center justify-between">
+          <p className="text-[10px] font-bold text-white/90 uppercase tracking-widest mb-1.5 flex items-center justify-between">
             <span>Aset Rusak</span>
-            <span className="text-rose-600 text-[10px] font-bold bg-rose-100 px-1.5 py-0.5 rounded">Perlu Aksi</span>
+            <span className="text-white text-[10px] font-bold bg-black/20 border border-white/25 px-1.5 py-0.5 rounded">Perlu Aksi</span>
           </p>
           <div className="flex items-end justify-between">
-            <span className="text-2xl font-bold font-mono text-rose-700">{stats.totalRusak.toLocaleString('id-ID')}</span>
-            <span className="text-[10px] text-rose-500 font-medium">Unit Rusak</span>
+            <span className="text-2xl font-bold font-mono text-white">{stats.totalRusak.toLocaleString('id-ID')}</span>
+            <span className="text-[10px] text-white/85 font-medium">Unit Rusak Berat / Aktif</span>
           </div>
         </div>
       </div>
