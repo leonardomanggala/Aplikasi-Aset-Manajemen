@@ -71,6 +71,13 @@ export default function AccountSettingsTab({
   const [deleteUserRef, setDeleteUserRef] = useState<{ id: string; name: string } | null>(null);
   const [usersPage, setUsersPage] = useState(1);
   const [usersPageSize, setUsersPageSize] = useState(10);
+  const [activeSection, setActiveSection] = useState<'profile' | 'identity' | 'users'>('profile');
+
+  useEffect(() => {
+    if (currentUser.role !== 'SUPER_ADMIN' && activeSection === 'users') {
+      setActiveSection('profile');
+    }
+  }, [currentUser.role, activeSection]);
 
   useEffect(() => {
     setUsersPage(page => Math.min(page, Math.max(1, Math.ceil(users.length / usersPageSize))));
@@ -212,13 +219,24 @@ export default function AccountSettingsTab({
       
       {/* Tab Banner Header */}
       <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-        <h2 className="text-sm font-bold text-slate-800 uppercase tracking-widest flex items-center gap-1.5">
+        <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
           <Sliders className="w-4.5 h-4.5 text-primary-650" />
-          Pengaturan Akun Operator Sesi
+          Pengaturan Akun
         </h2>
-        <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-          Ubah informasi identitas administrator, sesuaikan hak akses (RBAC Simulator), dan koordinasi batasan otorisasi penulisan.
-        </p>
+        <p className="text-xs text-slate-500 mt-1">Kelola profil, identitas aplikasi, dan akses pengguna.</p>
+        <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+          <button type="button" onClick={() => setActiveSection('profile')} className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold transition ${activeSection === 'profile' ? 'bg-primary-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}>
+            <UserIcon className="w-3.5 h-3.5" /> Profil & Hak Akses
+          </button>
+          <button type="button" onClick={() => setActiveSection('identity')} className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold transition ${activeSection === 'identity' ? 'bg-primary-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}>
+            <Church className="w-3.5 h-3.5" /> Identitas Paroki
+          </button>
+          {currentUser.role === 'SUPER_ADMIN' && (
+            <button type="button" onClick={() => setActiveSection('users')} className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold transition ${activeSection === 'users' ? 'bg-primary-600 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`}>
+              <Users className="w-3.5 h-3.5" /> Manajemen Pengguna
+            </button>
+          )}
+        </div>
       </div>
 
       {successMsg && (
@@ -235,7 +253,7 @@ export default function AccountSettingsTab({
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {activeSection === 'profile' && (<div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Profile Card Summary & Permission matrix */}
         <div className="lg:col-span-5 space-y-6">
@@ -548,10 +566,10 @@ export default function AccountSettingsTab({
           </div>
         </div>
 
-      </div>
+      </div>)}
 
       {/* 🏛 PENGATURAN IDENTITAS PAROKI */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-fade-in" id="parish-identity-section">
+      {activeSection === 'identity' && (<div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-fade-in" id="parish-identity-section">
         <div className="bg-slate-50 border-b border-slate-200 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="p-2 bg-primary-50 text-primary-700 rounded-lg">
@@ -623,10 +641,10 @@ export default function AccountSettingsTab({
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
 
       {/* 👥 MANAJEMEN PENGGUNA PAROKI - ONLY FOR SUPER ADMIN */}
-      {currentUser.role === 'SUPER_ADMIN' && (
+      {currentUser.role === 'SUPER_ADMIN' && activeSection === 'users' && (
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden animate-fade-in" id="user-management-section">
           {/* Section banner header */}
           <div className="bg-slate-50 border-b border-slate-200 px-6 py-4 flex items-center justify-between">
