@@ -93,7 +93,23 @@ h1, h2, h3, h4, .font-display {
 .simas-sidebar nav .space-y-1 > button,
 .simas-sidebar nav .space-y-1 .overflow-hidden button {
   color: #ffffff !important;
-  font-weight: 700 !important;
+  font-weight: 500 !important;
+}
+.simas-sidebar nav > button[class*="bg-primary-500/10"],
+.simas-sidebar nav .space-y-1 > button[class*="bg-primary-500/10"],
+.simas-sidebar nav .space-y-1 .overflow-hidden button[class*="bg-[#003b8f]"] {
+  font-weight: 600 !important;
+}
+.simas-sidebar .sidebar-menu-title {
+  line-height: 1.25;
+}
+.simas-sidebar .sidebar-menu-description {
+  display: block;
+  margin-top: .16rem;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 400;
+  opacity: .78;
 }
 .simas-sidebar nav button[class*="bg-primary-500/10"],
 .simas-sidebar nav button[class*="bg-primary-500/10"] {

@@ -902,8 +902,13 @@ export default function App() {
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
             }`}
           >
-            <LayoutDashboard className="w-4 h-4 text-primary-500 shrink-0" />
-            {!isSidebarCollapsed && <span>Dashboard</span>}
+            <LayoutDashboard className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" />
+            {!isSidebarCollapsed && (
+              <span className="flex min-w-0 flex-col items-start">
+                <span className="sidebar-menu-title">Dashboard</span>
+                <span className="sidebar-menu-description">Ringkasan kondisi aset</span>
+              </span>
+            )}
           </button>
 
           <button
@@ -915,8 +920,13 @@ export default function App() {
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
             }`}
           >
-            <FileText className="w-4 h-4 text-primary-500 shrink-0" />
-            {!isSidebarCollapsed && <span>Pelaporan</span>}
+            <FileText className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" />
+            {!isSidebarCollapsed && (
+              <span className="flex min-w-0 flex-col items-start">
+                <span className="sidebar-menu-title">Pelaporan</span>
+                <span className="sidebar-menu-description">Laporan inventaris dan akuntansi</span>
+              </span>
+            )}
           </button>
 
           <div className="space-y-1">
@@ -937,8 +947,13 @@ export default function App() {
               }`}
             >
               <div className="flex items-center gap-3">
-                <ClipboardList className={`w-4 h-4 text-primary-500 shrink-0 ${isSidebarCollapsed ? 'mx-auto' : ''}`} />
-                {!isSidebarCollapsed && <span>Register Aset ({assets.length})</span>}
+                <ClipboardList className={`w-4 h-4 text-primary-500 shrink-0 mt-0.5 ${isSidebarCollapsed ? 'mx-auto' : ''}`} />
+                {!isSidebarCollapsed && (
+                  <span className="flex min-w-0 flex-col items-start">
+                    <span className="sidebar-menu-title">Register Aset ({assets.length})</span>
+                    <span className="sidebar-menu-description">Data aset bergerak dan tidak bergerak</span>
+                  </span>
+                )}
               </div>
               {!isSidebarCollapsed && (
                 <ChevronDown className={`w-4 h-4 transition-transform ${isAssetMenuExpanded ? 'rotate-180' : ''}`} />
@@ -995,8 +1010,13 @@ export default function App() {
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
             }`}
           >
-            <Scan className="w-4 h-4 text-primary-500 shrink-0" />
-            {!isSidebarCollapsed && <span>Scanner & QR Booth</span>}
+            <Scan className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" />
+            {!isSidebarCollapsed && (
+              <span className="flex min-w-0 flex-col items-start">
+                <span className="sidebar-menu-title">Scanner & QR Booth</span>
+                <span className="sidebar-menu-description">Cari aset melalui kode QR</span>
+              </span>
+            )}
           </button>
 
           {permissions.import && (
@@ -1009,8 +1029,13 @@ export default function App() {
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
             }`}
           >
-            <FileSpreadsheet className="w-4 h-4 text-primary-500 shrink-0" />
-            {!isSidebarCollapsed && <span>Unggah Massal</span>}
+            <FileSpreadsheet className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" />
+            {!isSidebarCollapsed && (
+              <span className="flex min-w-0 flex-col items-start">
+                <span className="sidebar-menu-title">Unggah Massal</span>
+                <span className="sidebar-menu-description">Import aset dari Excel</span>
+              </span>
+            )}
           </button>
           )}
 
@@ -1024,8 +1049,13 @@ export default function App() {
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
             }`}
           >
-            <Database className="w-4 h-4 text-primary-500 shrink-0" />
-            {!isSidebarCollapsed && <span>Master Data</span>}
+            <Database className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" />
+            {!isSidebarCollapsed && (
+              <span className="flex min-w-0 flex-col items-start">
+                <span className="sidebar-menu-title">Master Data</span>
+                <span className="sidebar-menu-description">Kelola referensi kode aset</span>
+              </span>
+            )}
           </button>
           )}
 
@@ -1038,8 +1068,13 @@ export default function App() {
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
             }`}
           >
-            <Settings className="w-4 h-4 text-primary-500 shrink-0" />
-            {!isSidebarCollapsed && <span>Pengaturan Akun</span>}
+            <Settings className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" />
+            {!isSidebarCollapsed && (
+              <span className="flex min-w-0 flex-col items-start">
+                <span className="sidebar-menu-title">Pengaturan Akun</span>
+                <span className="sidebar-menu-description">Profil, pengguna, dan hak akses</span>
+              </span>
+            )}
           </button>
 
         </nav>
