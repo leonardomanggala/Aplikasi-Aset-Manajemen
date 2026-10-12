@@ -140,6 +140,47 @@ html.dark .simas-sidebar .text-slate-400 { color: #cbd5e1 !important; }
 html.dark .simas-sidebar .hover\:bg-slate-800\/50:hover,
 html.dark .simas-sidebar .hover\:bg-slate-800:hover { background: #1e293b !important; }
 
+/* Light mode sidebar: keep the navigation visually distinct from the dark theme. */
+html:not(.dark) .simas-sidebar {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #334155 !important;
+  box-shadow: 1px 0 18px rgb(15 23 42 / .08) !important;
+}
+html:not(.dark) .simas-sidebar .bg-slate-950,
+html:not(.dark) .simas-sidebar .bg-slate-900,
+html:not(.dark) .simas-sidebar .bg-slate-900\/50 {
+  background: #eef2f7 !important;
+}
+html:not(.dark) .simas-sidebar .border-slate-800\/50,
+html:not(.dark) .simas-sidebar .border-slate-800\/60 {
+  border-color: #e2e8f0 !important;
+}
+html:not(.dark) .simas-sidebar h1.text-white {
+  color: #111827 !important;
+}
+html:not(.dark) .simas-sidebar nav > button:not([class*="bg-primary-500/10"]),
+html:not(.dark) .simas-sidebar nav .space-y-1 > button:not([class*="bg-primary-500/10"]),
+html:not(.dark) .simas-sidebar nav .space-y-1 .overflow-hidden button:not([class*="bg-[#003b8f]"]) {
+  color: #1f2937 !important;
+}
+html:not(.dark) .simas-sidebar .hover\:bg-slate-800\/50:hover,
+html:not(.dark) .simas-sidebar .hover\:bg-slate-800:hover {
+  background: #e2e8f0 !important;
+  color: #111827 !important;
+}
+html:not(.dark) .simas-sidebar nav .overflow-hidden span.bg-slate-800 {
+  background: #e2e8f0 !important;
+  color: #475569 !important;
+}
+html:not(.dark) .simas-sidebar .text-slate-300,
+html:not(.dark) .simas-sidebar .text-slate-400 {
+  color: #475569 !important;
+}
+html:not(.dark) .simas-sidebar .text-slate-500 {
+  color: #64748b !important;
+}
+
 /* ==========================================
    HIGH-CONTRAST DARK MODE OVERRIDES
    ========================================== */
