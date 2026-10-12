@@ -31,6 +31,20 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Improve readability across the application. Small utility text is raised
+   by roughly 2px, while larger headings keep their original scale. */
+.simas-app .text-xs { font-size: 14px !important; }
+.simas-app .text-sm { font-size: 16px !important; }
+.simas-app .text-\[7px\] { font-size: 9px !important; }
+.simas-app .text-\[8px\] { font-size: 10px !important; }
+.simas-app .text-\[9px\] { font-size: 11px !important; }
+.simas-app .text-\[9\.5px\] { font-size: 11.5px !important; }
+.simas-app .text-\[10px\] { font-size: 12px !important; }
+.simas-app .text-\[10\.5px\] { font-size: 12.5px !important; }
+.simas-app .text-\[11px\] { font-size: 13px !important; }
+.simas-app .text-\[11\.5px\] { font-size: 13.5px !important; }
+.simas-app .text-\[13px\] { font-size: 15px !important; }
+
 ::selection { background: #dbeafe; color: #172554; }
 
 *:focus-visible {
@@ -106,7 +120,7 @@ h1, h2, h3, h4, .font-display {
 .simas-sidebar .sidebar-menu-description {
   display: block;
   margin-top: .16rem;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.2;
   font-weight: 400;
   opacity: .78;

@@ -803,7 +803,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/80 flex flex-col md:flex-row antialiased font-sans">
+    <div className="simas-app min-h-screen bg-slate-50/80 flex flex-col md:flex-row antialiased font-sans">
       
       {/* Mobile Top Navigation Bar */}
       <div className="md:hidden flex items-center justify-between px-4 py-3.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30">
