@@ -47,6 +47,7 @@ import MasterDataTab from './components/MasterDataTab';
 import AccountSettingsTab from './components/AccountSettingsTab';
 import ReportsTab from './components/ReportsTab';
 import AssetModal from './components/AssetModal';
+import AssetAssistant from './components/AssetAssistant';
 import Login from './components/Login';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -72,6 +73,7 @@ import {
   Menu,
   X,
   ChevronDown
+  ,Sparkles
 } from 'lucide-react';
 
 export default function App() {
@@ -301,6 +303,7 @@ export default function App() {
   const [isAssetMenuExpanded, setIsAssetMenuExpanded] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
+  const [isAssetAssistantOpen, setIsAssetAssistantOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     const cached = localStorage.getItem('sim_aset_theme');
     if (cached !== null) {
@@ -1119,6 +1122,15 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsAssetAssistantOpen(true)}
+              className="flex items-center gap-1.5 rounded-lg border border-primary-200 bg-primary-50 px-2.5 py-1.5 text-[10px] font-bold uppercase text-primary-700 shadow-sm transition hover:bg-primary-100 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-300 dark:hover:bg-primary-900/50"
+              title="Buka AI Assistant untuk mencari aset"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>AI Cari Aset</span>
+            </button>
             {/* Global High-Contrast Style Theme Toggle */}
             <button
               type="button"
@@ -1299,6 +1311,17 @@ export default function App() {
           peruntukanMap={peruntukanMap}
           kodeNamaBarangMap={kodeNamaBarangMap}
           bidangMap={bidangMap}
+        />
+      )}
+
+      {isAssetAssistantOpen && (
+        <AssetAssistant
+          assets={assets}
+          jenisAsetMap={jenisAsetMap}
+          letakRuangMap={letakRuangMap}
+          bidangMap={bidangMap}
+          onSelectAsset={handleInspectAsset}
+          onClose={() => setIsAssetAssistantOpen(false)}
         />
       )}
 

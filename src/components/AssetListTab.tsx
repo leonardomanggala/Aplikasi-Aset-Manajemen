@@ -40,6 +40,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
+import { summarizeValidation, validateAsset } from '../utils/assetValidation';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -356,6 +357,13 @@ export default function AssetListTab({
       tanggalPerolehan: formData.tanggalPerolehan,
       noUrutSejenis: autoCalculatedUrut
     });
+
+    const validationIssues = validateAsset({ ...formData, tahun: Number(formData.tahun), noSeriFinal: serialNum, hargaPembelian: Number(formData.hargaPembelian), qty: Number(formData.qty) }, assets, isEditing ? editingId || undefined : undefined);
+    const blockingIssues = validationIssues.filter(issue => issue.severity === 'error');
+    if (blockingIssues.length > 0) {
+      setFormErrorMsg(summarizeValidation(blockingIssues));
+      return;
+    }
 
     if (isEditing) {
 
