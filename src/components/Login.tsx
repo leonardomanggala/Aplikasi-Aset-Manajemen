@@ -52,7 +52,7 @@ export default function Login({ users, onLoginSuccess, isDarkMode, appLogo }: Lo
   };
 
   return (
-    <div id="login-container" className="min-h-screen w-full flex bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+    <div id="login-container" className="min-h-screen w-full flex transition-colors duration-300">
       
       {/* Left side: Image (Visible on large screens) */}
       <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-primary-900">
