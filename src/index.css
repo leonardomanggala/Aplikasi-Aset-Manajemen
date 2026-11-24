@@ -542,3 +542,20 @@ html:not(.dark) .shadcn-sidebar {
   --sidebar-border: #e2e8f0;
 }
 html:not(.dark) .shadcn-sidebar .sidebar-footer { background: #f8fafc !important; }
+html:not(.dark) .shadcn-sidebar .sidebar-menu-description { color: #64748b !important; }
+html:not(.dark) .shadcn-sidebar nav > button[class*="bg-primary-500/10"] {
+  background: #2B4C3C !important;
+  color: #ffffff !important;
+}
+html:not(.dark) .shadcn-sidebar nav > button[class*="bg-primary-500/10"] .sidebar-menu-description {
+  color: #e2e8f0 !important;
+}
+html:not(.dark) .shadcn-sidebar nav button[class*="bg-primary-800"] {
+  background: #e8f2eb !important;
+  color: #16281f !important;
+  box-shadow: inset 3px 0 0 #2B4C3C !important;
+}
+html:not(.dark) .shadcn-sidebar nav button[class*="bg-primary-800"] .bg-slate-800 {
+  background: #ffffff !important;
+  color: #334155 !important;
+}
