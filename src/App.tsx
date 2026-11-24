@@ -49,6 +49,8 @@ import ReportsTab from './components/ReportsTab';
 import AssetModal from './components/AssetModal';
 import AssetAssistant from './components/AssetAssistant';
 import Login from './components/Login';
+import { Button } from './components/ui/button';
+import { Badge } from './components/ui/badge';
 import { motion, AnimatePresence } from 'motion/react';
 
 import { 
@@ -839,10 +841,10 @@ export default function App() {
       )}
 
       {/* 1. Left Sidebar Navigation Panel */}
-      <aside className={`simas-sidebar relative fixed inset-y-0 left-0 z-50 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 w-72 md:w-auto ${isSidebarCollapsed ? 'md:w-16' : 'md:w-56'} bg-slate-950 flex flex-col border-r border-slate-800/50 text-slate-300 shrink-0 select-none md:sticky md:top-0 h-screen transition-all duration-300 ease-in-out shadow-2xl shadow-slate-950/20`}>
+      <aside className={`simas-sidebar shadcn-sidebar relative fixed inset-y-0 left-0 z-50 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 w-72 md:w-auto ${isSidebarCollapsed ? 'md:w-16' : 'md:w-56'} bg-slate-950 flex flex-col border-r border-slate-800/50 text-slate-300 shrink-0 select-none md:sticky md:top-0 h-screen transition-all duration-300 ease-in-out shadow-2xl shadow-slate-950/20`}>
         
         {/* Sidebar Header Brand segment */}
-        <div className={`h-16 ${isSidebarCollapsed ? 'px-2' : 'px-4'} border-b border-slate-800/50 flex items-center justify-between transition-all`}>
+        <div className={`sidebar-header h-16 ${isSidebarCollapsed ? 'px-2' : 'px-4'} border-b border-slate-800/50 flex items-center justify-between transition-all`}>
           {(!isSidebarCollapsed || isMobileMenuOpen) && (
             <div className="flex items-center gap-2.5 animate-fade-in shrink-0">
               {appLogo ? (
@@ -891,9 +893,9 @@ export default function App() {
         </button>
 
         {/* Sidebar Menu sections */}
-        <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto">
+        <nav className="sidebar-content flex-1 p-3 space-y-1.5 overflow-y-auto">
           {!isSidebarCollapsed && (
-            <div className="text-xs text-slate-500 font-semibold tracking-wide mb-3 px-2">Menu Utama</div>
+            <div className="sidebar-group-label text-xs text-slate-500 font-semibold tracking-wide mb-3 px-2">Menu Utama</div>
           )}
           
           <button
@@ -975,7 +977,7 @@ export default function App() {
                     onClick={() => handleTabChange('assets_tidak_bergerak')}
                     className={`w-full flex items-center justify-between py-2 px-3 rounded-lg text-[18px] font-semibold tracking-normal transition ${
                       activeTab === 'assets_tidak_bergerak'
-                        ? 'bg-[#003b8f] text-blue-100 font-bold ring-1 ring-blue-400/30 shadow-lg shadow-blue-950/20'
+                        ? 'bg-primary-800 text-primary-100 font-bold ring-1 ring-primary-400/30 shadow-lg shadow-primary-950/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                     }`}
                   >
@@ -989,7 +991,7 @@ export default function App() {
                     onClick={() => handleTabChange('assets_bergerak')}
                     className={`w-full flex items-center justify-between py-2 px-3 rounded-lg text-[18px] font-semibold tracking-normal transition ${
                       activeTab === 'assets_bergerak'
-                        ? 'bg-[#003b8f] text-blue-100 font-bold ring-1 ring-blue-400/30 shadow-lg shadow-blue-950/20'
+                        ? 'bg-primary-800 text-primary-100 font-bold ring-1 ring-primary-400/30 shadow-lg shadow-primary-950/20'
                 : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                     }`}
                   >
@@ -1084,7 +1086,7 @@ export default function App() {
 
         {/* Sidebar Footer RBAC Operator Switcher */}
         {!isSidebarCollapsed && permissions.users && (
-          <div className="p-4 border-t border-slate-800/50 bg-slate-950">
+          <div className="sidebar-footer p-4 border-t border-slate-800/50 bg-slate-950">
             <div className="flex flex-col gap-2">
               <span className="text-[9px] text-slate-500 font-bold uppercase">Ganti Operator Sesi:</span>
               <select
@@ -1122,20 +1124,24 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button
+            <Button
               type="button"
               onClick={() => setIsAssetAssistantOpen(true)}
-              className="flex items-center gap-1.5 rounded-lg border border-primary-200 bg-primary-50 px-2.5 py-1.5 text-[10px] font-bold uppercase text-primary-700 shadow-sm transition hover:bg-primary-100 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-300 dark:hover:bg-primary-900/50"
+              variant="outline"
+              size="sm"
+              className="h-8 border-primary-200 bg-primary-50 px-2.5 text-[10px] font-bold uppercase text-primary-700 hover:bg-primary-100 dark:border-primary-800 dark:bg-primary-950/40 dark:text-primary-300 dark:hover:bg-primary-900/50"
               title="Buka AI Assistant untuk mencari aset"
             >
               <Sparkles className="h-3.5 w-3.5" />
               <span>AI Cari Aset</span>
-            </button>
+            </Button>
             {/* Global High-Contrast Style Theme Toggle */}
-            <button
+            <Button
               type="button"
               onClick={() => setIsDarkMode(prev => !prev)}
-              className="p-1 px-2.5 rounded-lg border flex items-center gap-1.5 transition-all cursor-pointer text-[10px] font-bold uppercase shadow-sm font-mono bg-slate-50 hover:bg-slate-100 dark:hover:bg-slate-700 border-slate-200 text-slate-600 dark:bg-slate-800 dark:border-slate-700 dark:text-amber-400"
+              variant="outline"
+              size="sm"
+              className="h-8 px-2.5 text-[10px] font-bold uppercase font-mono bg-slate-50 hover:bg-slate-100 dark:hover:bg-slate-700 border-slate-200 text-slate-600 dark:bg-slate-800 dark:border-slate-700 dark:text-amber-400"
               title={isDarkMode ? "Ganti ke Mode Terang" : "Ganti ke Mode Gelap (Kontras Tinggi)"}
             >
               {isDarkMode ? (
@@ -1145,42 +1151,44 @@ export default function App() {
                 </>
               ) : (
                 <>
-                  <Moon className="w-3.5 h-3.5 text-indigo-500" />
+                  <Moon className="w-3.5 h-3.5 text-primary-500" />
                   <span>K. TINGGI (GELAP)</span>
                 </>
               )}
-            </button>
+            </Button>
 
             <span className="text-[10px] font-mono text-slate-450 uppercase">AKTIF: <strong className="text-slate-700 font-bold font-sans">{currentUser.name}</strong></span>
             
             {canonicalRole === 'SUPER_ADMIN' ? (
-              <span className="bg-primary-50 text-primary-700 px-2.5 py-1 rounded text-[10px] uppercase font-bold border border-primary-100 flex items-center gap-1 shadow-sm font-mono">
+              <Badge className="bg-primary-50 text-primary-700 px-2.5 py-1 text-[10px] uppercase border-primary-100 shadow-sm font-mono">
                 <ShieldCheck className="w-3.5 h-3.5 text-primary-500" />
                 DITERAL ADMIN
-              </span>
+              </Badge>
             ) : (
-              <span className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded text-[10px] uppercase font-bold border border-slate-200 flex items-center gap-1 font-mono">
+              <Badge variant="secondary" className="px-2.5 py-1 text-[10px] uppercase border border-slate-200 font-mono">
                 <Lock className="w-3 h-3 text-slate-400" />
                 AKSES TERBATAS
-              </span>
+              </Badge>
             )}
 
             {/* Logout Action Button */}
-            <button
+            <Button
               type="button"
               onClick={handleLogout}
-              className="p-1 px-2.5 rounded-lg border border-rose-200 text-rose-600 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:border-rose-900/70 dark:text-rose-300 flex items-center gap-1.5 transition-all cursor-pointer text-[10px] font-bold uppercase shadow-sm font-mono"
+              variant="outline"
+              size="sm"
+              className="h-8 border-rose-200 text-rose-600 bg-rose-50 px-2.5 text-[10px] font-bold uppercase shadow-sm font-mono hover:bg-rose-100 dark:bg-rose-950/40 dark:border-rose-900/70 dark:text-rose-300"
               title="Keluar dari Aplikasi (Logout)"
             >
               <LogOut className="w-3.5 h-3.5 text-rose-500" />
               <span>KELUAR</span>
-            </button>
+            </Button>
           </div>
 
         </header>
 
         {/* Tab content area container */}
-        <main className="flex-1 w-full max-w-[1800px] mx-auto p-5 md:p-7 xl:p-8 space-y-7 overflow-hidden relative">
+        <main className="simas-content flex-1 w-full max-w-[1800px] mx-auto p-5 md:p-7 xl:p-8 space-y-7 overflow-hidden relative">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

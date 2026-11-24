@@ -933,7 +933,7 @@ export default function AssetListTab({
                       <td className="px-6 py-4">
                         <span 
                           onClick={() => onSelectAsset(asset)}
-                          className="font-mono text-xs text-primary-600 hover:text-primary-700 font-bold decoration-dashed hover:underline cursor-pointer tracking-tight"
+                          className="font-mono text-xs text-primary-700 hover:text-primary-800 dark:text-primary-300 dark:hover:text-primary-200 font-bold decoration-dashed hover:underline cursor-pointer tracking-tight"
                         >
                           {asset.noSeriFinal}
                         </span>

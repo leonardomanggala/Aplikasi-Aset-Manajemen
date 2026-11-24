@@ -645,10 +645,10 @@ export default function AssetModal({
                           type="monotone" 
                           dataKey="nilaiBuku" 
                           name="Nilai Buku" 
-                          stroke="#3b82f6" 
+                          stroke="#2B4C3C" 
                           strokeWidth={2}
-                          dot={{ r: 2.5, fill: '#3b82f6', strokeWidth: 0 }}
-                          activeDot={{ r: 4, stroke: '#bfdbfe', strokeWidth: 3 }}
+                          dot={{ r: 2.5, fill: '#2B4C3C', strokeWidth: 0 }}
+                          activeDot={{ r: 4, stroke: '#bed4c5', strokeWidth: 3 }}
                         />
                         <Line 
                           type="monotone" 

@@ -284,72 +284,42 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4">
         {/* Card 1: Total Units */}
-        <div className="bg-[#0b43c6] p-4 rounded-xl border border-[#1b5be4] shadow-sm hover:shadow-md transition text-white">
-          <p className="text-[10px] font-bold text-white/90 uppercase tracking-widest mb-1.5 flex items-center justify-between">
-            <span>Total Kuantitas</span>
-            <span className="text-white/90 text-[10px] font-bold bg-white/10 border border-white/25 px-1.5 py-0.5 rounded">Aktif</span>
-          </p>
-          <div className="flex items-end justify-between">
-            <span className="text-2xl font-bold font-mono text-white">{stats.totalUnits.toLocaleString('id-ID')}</span>
-            <span className="text-[10px] text-white/75 font-medium">Unit Terdata</span>
-          </div>
+        <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm transition hover:shadow-md">
+          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Jumlah Unit</div>
+          <div className="mt-2 text-2xl font-bold text-slate-900">{stats.totalUnits.toLocaleString('id-ID')}</div>
         </div>
 
         {/* Card 2: Original Cost */}
-        <div className="bg-[#00b509] p-4 rounded-xl border border-[#12c61b] shadow-sm hover:shadow-md transition text-white">
-          <p className="text-[10px] font-bold text-white/90 uppercase tracking-widest mb-1.5 flex items-center justify-between">
-            <span>Nilai Perolehan</span>
-            <span className="text-white/90 text-[9px] font-bold bg-white/10 border border-white/25 px-1.5 py-0.5 rounded">Historis</span>
-          </p>
-          <div className="flex items-end justify-between">
-            <span className="text-xl font-bold font-mono text-white">{formatRupiah(stats.totalOriginalValue)}</span>
-            <span className="text-[10px] text-white/75 font-semibold">Harga Awal</span>
-          </div>
+        <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm transition hover:shadow-md">
+          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Harga Perolehan</div>
+          <div className="mt-2 text-xl font-bold text-primary-600">{formatRupiah(stats.totalOriginalValue)}</div>
         </div>
 
         {/* Card 3: Book Value */}
         <div 
           onClick={() => setActiveModal('bookValue')}
-          className="bg-[#141418] p-4 rounded-xl border border-[#2d3340] shadow-sm hover:shadow-md transition cursor-pointer text-white"
+          className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm transition hover:shadow-md cursor-pointer"
         >
-          <p className="text-[10px] font-bold text-white/75 uppercase tracking-widest mb-1.5 flex items-center justify-between">
-            <span>Nilai Buku Saat Ini</span>
-            <span className="text-blue-300 text-[9px] font-bold bg-blue-400/10 border border-blue-300/30 px-1.5 py-0.5 rounded">Depresiasi</span>
-          </p>
-          <div className="flex items-end justify-between">
-            <span className="text-xl font-bold font-mono text-[#4f9bff]">{formatRupiah(stats.totalBookValue)}</span>
-            <span className="text-[10px] text-white/65 font-medium">Aktual</span>
-          </div>
+          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Nilai Buku</div>
+          <div className="mt-2 text-xl font-bold text-emerald-600">{formatRupiah(stats.totalBookValue)}</div>
         </div>
 
         {/* Card 4: Depreciation per year */}
         <div 
           onClick={() => setActiveModal('depreciation')}
-          className="bg-[#b88600] p-4 rounded-xl border border-[#d19b00] shadow-sm hover:shadow-md transition cursor-pointer text-white"
+          className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm transition hover:shadow-md cursor-pointer"
         >
-          <p className="text-[10px] font-bold text-white/90 uppercase tracking-widest mb-1.5 flex items-center justify-between">
-            <span>Penyusutan / Tahun</span>
-            <span className="text-white/90 text-[9px] font-bold bg-white/10 border border-white/25 px-1.5 py-0.5 rounded">Garis Lurus</span>
-          </p>
-          <div className="flex items-end justify-between">
-            <span className="text-xl font-bold font-mono text-white">{formatRupiah(stats.totalDepreciationYear)}</span>
-            <span className="text-[9px] text-white/75 uppercase font-mono">Beban Tahun Ini</span>
-          </div>
+          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Akumulasi Penyusutan</div>
+          <div className="mt-2 text-xl font-bold text-amber-600">{formatRupiah(stats.totalDepreciationYear)}</div>
         </div>
 
         {/* Card 5: Damaged Assets */}
         <div 
           onClick={() => setActiveModal('damaged')}
-          className="bg-[#f33d40] p-4 rounded-xl border border-[#ff686b] shadow-sm hover:shadow-md transition cursor-pointer text-white"
+          className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm transition hover:shadow-md cursor-pointer"
         >
-          <p className="text-[10px] font-bold text-white/90 uppercase tracking-widest mb-1.5 flex items-center justify-between">
-            <span>Aset Rusak</span>
-            <span className="text-white text-[10px] font-bold bg-black/20 border border-white/25 px-1.5 py-0.5 rounded">Perlu Aksi</span>
-          </p>
-          <div className="flex items-end justify-between">
-            <span className="text-2xl font-bold font-mono text-white">{stats.totalRusak.toLocaleString('id-ID')}</span>
-            <span className="text-[10px] text-white/85 font-medium">Unit Rusak Berat / Aktif</span>
-          </div>
+          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Aset Rusak</div>
+          <div className="mt-2 text-2xl font-bold text-rose-600">{stats.totalRusak.toLocaleString('id-ID')}</div>
         </div>
       </div>
 
@@ -411,7 +381,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
             <div className="max-h-[28rem] overflow-y-auto pr-1 space-y-3 mt-2">
               {stats.bidangDistribution.map((item, index) => {
                 const width = item.value > 0 ? Math.max((item.value / maxBidangBookValue) * 100, 2) : 0;
-                const colors = ['#005ce2', '#3b82f6', '#2563eb', '#0ea5e9', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'];
+                const colors = ['#2B4C3C', '#476A57', '#638C73', '#93B69F', '#f59e0b', '#ef4444', '#ec4899', '#14b8a6'];
                 return (
                   <div key={item.bidang} className="space-y-1.5">
                     <div className="flex items-center justify-between gap-3 text-[11px]">
@@ -510,7 +480,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                     {stats.categoryDistribution.filter(c => c.bookValue > 0).map((entry, index) => (
                       <Cell 
                         key={entry.category} 
-                        fill={['#005ce2', '#3b82f6', '#2563eb', '#06b6d4', '#14b8a6', '#10b981', '#93c5fd', '#60a5fa', '#f43f5e', '#f59e0b'][index % 10]}
+                        fill={['#2B4C3C', '#476A57', '#638C73', '#93B69F', '#14b8a6', '#10b981', '#BED4C5', '#DCE9DF', '#f43f5e', '#f59e0b'][index % 10]}
                       />
                     ))}
                   </Pie>
@@ -528,7 +498,7 @@ export default function DashboardTab({ assets, onSelectAsset, jenisAsetMap, bida
                 return (
                   <div key={item.category} className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2 max-w-[70%]">
-                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: ['#005ce2', '#3b82f6', '#2563eb', '#06b6d4', '#14b8a6', '#10b981', '#93c5fd', '#60a5fa', '#f43f5e', '#f59e0b'][index % 10] }}></span>
+                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: ['#2B4C3C', '#476A57', '#638C73', '#93B69F', '#14b8a6', '#10b981', '#BED4C5', '#DCE9DF', '#f43f5e', '#f59e0b'][index % 10] }}></span>
                       <span className="text-slate-600 font-medium truncate" title={item.category}>{item.category}</span>
                     </div>
                     <span className="font-semibold text-slate-800 font-mono">{percentage}%</span>

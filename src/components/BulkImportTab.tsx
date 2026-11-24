@@ -737,7 +737,7 @@ export default function BulkImportTab({
               name="import-overwrite-mode" 
               checked={!replaceExisting} 
               onChange={() => setReplaceExisting(false)}
-              className="mt-0.5 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5 shrink-0"
+              className="mt-0.5 text-primary-600 focus:ring-primary-500 w-3.5 h-3.5 shrink-0"
             />
             <div>
               <span className="font-bold block text-[11px] uppercase tracking-wide">Gabungkan Data (Append Mode)</span>
@@ -758,7 +758,7 @@ export default function BulkImportTab({
               name="import-overwrite-mode" 
               checked={replaceExisting} 
               onChange={() => setReplaceExisting(true)}
-              className="mt-0.5 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5 shrink-0"
+              className="mt-0.5 text-primary-600 focus:ring-primary-500 w-3.5 h-3.5 shrink-0"
             />
             <div>
               <span className="font-bold block text-[11px] uppercase tracking-wide text-indigo-950">Kosongkan & Ganti Semua (Overwrite Mode)</span>

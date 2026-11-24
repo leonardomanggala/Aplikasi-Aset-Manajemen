@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { User } from '../types';
 import { Lock, User as UserIcon, Eye, EyeOff, AlertCircle, LogIn } from 'lucide-react';
+import { Button } from './ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
 
 interface LoginProps {
   users: User[];
@@ -85,17 +88,19 @@ export default function Login({ users, onLoginSuccess, isDarkMode, appLogo }: Lo
         {/* Ambient background for mobile only */}
         <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-60 lg:hidden"></div>
         
-        <div className="w-full max-w-md relative z-10 animate-fade-in">
+        <Card className="w-full max-w-md relative z-10 animate-fade-in border-border/80 bg-card/95 backdrop-blur shadow-xl">
           
           {/* Upper Brand Icon & Title (Mobile & Desktop) */}
-          <div className="mb-12 text-center lg:text-left">
-            <h2 className="text-4xl font-bold text-slate-800 dark:text-slate-100">
+          <CardHeader className="pb-6 text-center lg:text-left">
+            <CardTitle className="text-3xl font-bold">
               Welcome!
-            </h2>
-            <p className="text-l text-slate-500 dark:text-slate-400 mt-2">
+            </CardTitle>
+            <CardDescription className="mt-2 text-base">
               Silakan masuk ke akun Anda untuk mengakses Aplikasi.
-            </p>
-          </div>
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
 
           {errorMsg && (
             <div className="mb-6 p-4 bg-rose-50 dark:bg-rose-950/45 text-rose-850 dark:text-rose-300 rounded-xl border border-rose-100 dark:border-rose-900/60 text-xs flex items-start gap-3 animate-pulse">
@@ -118,13 +123,13 @@ export default function Login({ users, onLoginSuccess, isDarkMode, appLogo }: Lo
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <UserIcon className="h-4 w-4 text-slate-400 group-focus-within:text-primary-500 transition-colors" />
                 </div>
-                <input
+                <Input
                   type="text"
                   required
                   value={usernameInput}
                   onChange={(e) => setUsernameInput(e.target.value)}
                   placeholder="Masukkan username Anda"
-                  className="block w-full pl-10 pr-4 py-3 text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all font-sans placeholder-slate-400 shadow-sm"
+                  className="h-11 rounded-lg pl-10 pr-4"
                 />
               </div>
             </div>
@@ -140,13 +145,13 @@ export default function Login({ users, onLoginSuccess, isDarkMode, appLogo }: Lo
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <Lock className="h-4 w-4 text-slate-400 group-focus-within:text-primary-500 transition-colors" />
                 </div>
-                <input
+                <Input
                   type={showPassword ? "text" : "password"}
                   required
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
                   placeholder="Masukkan kata sandi Anda"
-                  className="block w-full pl-10 pr-11 py-3 text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all font-sans placeholder-slate-400 shadow-sm"
+                  className="h-11 rounded-lg pl-10 pr-11"
                 />
                 <button
                   type="button"
@@ -160,10 +165,10 @@ export default function Login({ users, onLoginSuccess, isDarkMode, appLogo }: Lo
             </div>
 
             {/* Submit button */}
-            <button
+            <Button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full mt-2 py-3.5 px-4 bg-primary-600 hover:bg-primary-500 text-white rounded-xl font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 border border-primary-700 shadow-lg shadow-primary-500/20 cursor-pointer ${
+              className={`w-full mt-2 h-11 rounded-lg font-semibold shadow-sm ${
                 isSubmitting ? 'opacity-70 pointer-events-none' : ''
               }`}
             >
@@ -178,14 +183,15 @@ export default function Login({ users, onLoginSuccess, isDarkMode, appLogo }: Lo
                   <span>Masuk Workspace</span>
                 </>
               )}
-            </button>
+            </Button>
           </form>
 
           {/* Footer info */}
           <div className="mt-12 text-center lg:text-left text-[10px] text-slate-400 dark:text-slate-500 font-mono">
             <p>© {new Date().getFullYear()} DIBERDAYAKAN oleh TIM ASET PAROKI</p>
           </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
