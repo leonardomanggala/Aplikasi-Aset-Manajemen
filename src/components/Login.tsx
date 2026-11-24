@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { AlertCircle, Eye, EyeOff, LogIn } from 'lucide-react';
 import { User } from '../types';
-import { Lock, User as UserIcon, Eye, EyeOff, AlertCircle, LogIn } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
@@ -8,11 +8,10 @@ import { Input } from './ui/input';
 interface LoginProps {
   users: User[];
   onLoginSuccess: (user: User) => void;
-  isDarkMode: boolean;
   appLogo?: string | null;
 }
 
-export default function Login({ users, onLoginSuccess, isDarkMode, appLogo }: LoginProps) {
+export default function Login({ users, onLoginSuccess, appLogo }: LoginProps) {
   const [usernameInput, setUsernameInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +23,6 @@ export default function Login({ users, onLoginSuccess, isDarkMode, appLogo }: Lo
     setErrorMsg(null);
     setIsSubmitting(true);
 
-    // Simulate validation with minor security feeling latency
     setTimeout(() => {
       const sanitizedUsername = usernameInput.trim().toLowerCase();
       const sanitizedPassword = passwordInput.trim();
@@ -35,10 +33,9 @@ export default function Login({ users, onLoginSuccess, isDarkMode, appLogo }: Lo
         return;
       }
 
-      // Check users database
       const matchedUser = users.find(u => {
         const uName = (u.username || '').toLowerCase();
-        const uPass = u.password || '123'; // fallback default
+        const uPass = u.password || '123';
         return uName === sanitizedUsername && uPass === sanitizedPassword;
       });
 
@@ -51,148 +48,145 @@ export default function Login({ users, onLoginSuccess, isDarkMode, appLogo }: Lo
     }, 450);
   };
 
+  const logoSrc = appLogo || '/pw.png';
+
   return (
-    <div id="login-container" className="min-h-screen w-full flex transition-colors duration-300">
-      
-      {/* Left side: Image (Visible on large screens) */}
-      <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-primary-900">
-        {/* Background Image - user uploaded image via public folder */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-10000 hover:scale-105"
-          style={{ backgroundImage: `url('/login-bg.jpg')` }}
-        ></div>
-        
-        {/* Gradient overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-primary-950/90 via-primary-900/40 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary-900/50 to-transparent"></div>
-        
-        <div className="absolute bottom-12 left-12 right-12 text-white z-10 animate-fade-in">
-          <div className="w-16 h-16 bg-white/5 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 border border-white/5">
-            {appLogo ? (
-              <img src={appLogo} alt="Paroki Logo" className="w-10 h-10 object-contain drop-shadow-md" />
-            ) : (
-              <img src="/pw.png" alt="Paroki Logo" className="w-10 h-10 object-contain drop-shadow-md" />
-            )}
+    <main id="login-container" className="min-h-screen w-full bg-background text-foreground lg:grid lg:grid-cols-2">
+      <section className="relative hidden min-h-screen overflow-hidden bg-primary-950 lg:block">
+        <img
+          src="/login-bg.jpg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+        <div className="relative z-10 flex min-h-screen flex-col justify-between p-10 text-white xl:p-14">
+          <div className="flex items-center gap-3">
+            <div className="flex size-11 items-center justify-center rounded-xl border border-white/20 bg-white/10 p-2 backdrop-blur">
+              <img src={logoSrc} alt="" className="h-full w-full object-contain" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold tracking-wide">SIMAS Paroki</p>
+              <p className="text-xs text-white/70">Sistem Manajemen Aset</p>
+            </div>
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold font-display drop-shadow-md leading-tight">
-            Penatausahaan Aset <br/> Paroki Pringwulung
-          </h2>
-          <p className="text-lg lg:text-xl mt-4 font-light drop-shadow-md text-white/90 max-w-xl">
-            Sistem informasi manajemen terpadu untuk pencatatan, pemantauan, dan pemeliharaan inventaris Gereja Santo Yohanes Rasul.
+
+          <div className="max-w-xl pb-6">
+            <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-white/75">
+              Paroki Pringwulung
+            </p>
+            <h1 className="text-4xl font-semibold leading-tight tracking-tight xl:text-5xl">
+              Penatausahaan Aset
+              <br />
+              Paroki Pringwulung
+            </h1>
+            <p className="mt-5 max-w-lg text-base leading-7 text-white/80">
+              Sistem informasi terpadu untuk pencatatan, pemantauan, dan pemeliharaan
+              inventaris Gereja Santo Yohanes Rasul.
+            </p>
+          </div>
+
+          <p className="text-xs text-white/60">
+            © {new Date().getFullYear()} Tim Aset Paroki
           </p>
         </div>
-      </div>
-      
-      {/* Right side: Login Form */}
-      <div className="w-full lg:w-[45%] flex items-center justify-center p-8 sm:p-12 lg:p-16 relative">
-        {/* Ambient background for mobile only */}
-        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-60 lg:hidden"></div>
-        
-        <Card className="w-full max-w-md relative z-10 animate-fade-in border-border/80 bg-card/95 backdrop-blur shadow-xl">
-          
-          {/* Upper Brand Icon & Title (Mobile & Desktop) */}
-          <CardHeader className="pb-6 text-center lg:text-left">
-            <CardTitle className="text-3xl font-bold">
-              Welcome!
-            </CardTitle>
-            <CardDescription className="mt-2 text-base">
-              Silakan masuk ke akun Anda untuk mengakses Aplikasi.
-            </CardDescription>
+      </section>
+
+      <section className="flex min-h-screen items-center justify-center bg-background px-5 py-10 sm:px-8">
+        <Card className="w-full max-w-[420px] border-border/80 bg-card shadow-lg shadow-foreground/5">
+          <CardHeader className="space-y-5">
+            <div className="flex size-12 items-center justify-center rounded-xl border border-border bg-muted p-2.5 lg:hidden">
+              <img src={logoSrc} alt="Logo Paroki" className="h-full w-full object-contain" />
+            </div>
+            <div className="space-y-2">
+              <CardTitle className="text-2xl font-semibold tracking-tight">
+                Selamat datang
+              </CardTitle>
+              <CardDescription className="text-sm leading-6">
+                Masuk menggunakan akun Anda untuk melanjutkan ke workspace aset.
+              </CardDescription>
+            </div>
           </CardHeader>
 
           <CardContent>
-
-          {errorMsg && (
-            <div className="mb-6 p-4 bg-rose-50 dark:bg-rose-950/45 text-rose-850 dark:text-rose-300 rounded-xl border border-rose-100 dark:border-rose-900/60 text-xs flex items-start gap-3 animate-pulse">
-              <AlertCircle className="w-5 h-5 shrink-0 text-rose-500" />
-              <div className="pt-0.5">
-                <span className="font-bold block mb-0.5 text-sm">Gagal Masuk</span>
-                {errorMsg}
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            
-            {/* Username field */}
-            <div>
-              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 font-mono">
-                Username
-              </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <UserIcon className="h-4 w-4 text-slate-400 group-focus-within:text-primary-500 transition-colors" />
+            {errorMsg && (
+              <div
+                role="alert"
+                className="mb-5 flex items-start gap-3 rounded-md border border-destructive/30 bg-destructive/10 p-3.5 text-sm text-destructive"
+              >
+                <AlertCircle className="mt-0.5 size-4 shrink-0" />
+                <div>
+                  <p className="font-medium">Gagal masuk</p>
+                  <p className="mt-1 opacity-90">{errorMsg}</p>
                 </div>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-2">
+                <label htmlFor="login-username" className="text-sm font-medium leading-none">
+                  Username
+                </label>
                 <Input
+                  id="login-username"
                   type="text"
+                  autoComplete="username"
                   required
                   value={usernameInput}
-                  onChange={(e) => setUsernameInput(e.target.value)}
-                  placeholder="Masukkan username Anda"
-                  className="h-11 rounded-lg pl-10 pr-4"
+                  onChange={e => setUsernameInput(e.target.value)}
+                  placeholder="Masukkan username"
                 />
               </div>
-            </div>
 
-            {/* Password field */}
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider font-mono">
-                  Kata Sandi
+              <div className="space-y-2">
+                <label htmlFor="login-password" className="text-sm font-medium leading-none">
+                  Kata sandi
                 </label>
-              </div>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <Lock className="h-4 w-4 text-slate-400 group-focus-within:text-primary-500 transition-colors" />
+                <div className="relative">
+                  <Input
+                    id="login-password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    required
+                    value={passwordInput}
+                    onChange={e => setPasswordInput(e.target.value)}
+                    placeholder="Masukkan kata sandi"
+                    className="pr-10"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
+                    onClick={() => setShowPassword(show => !show)}
+                    className="absolute right-0 top-0 h-10 w-10 text-muted-foreground hover:text-foreground"
+                  >
+                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </Button>
                 </div>
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={passwordInput}
-                  onChange={(e) => setPasswordInput(e.target.value)}
-                  placeholder="Masukkan kata sandi Anda"
-                  className="h-11 rounded-lg pl-10 pr-11"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(p => !p)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-                  title={showPassword ? "Sembunyikan sandi" : "Tampilkan sandi"}
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
               </div>
-            </div>
 
-            {/* Submit button */}
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className={`w-full mt-2 h-11 rounded-lg font-semibold shadow-sm ${
-                isSubmitting ? 'opacity-70 pointer-events-none' : ''
-              }`}
-            >
-              {isSubmitting ? (
-                <>
-                  <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin"></div>
-                  <span>MEMVERIFIKASI...</span>
-                </>
-              ) : (
-                <>
-                  <LogIn className="w-5 h-5" />
-                  <span>Masuk Workspace</span>
-                </>
-              )}
-            </Button>
-          </form>
+              <Button type="submit" disabled={isSubmitting} className="w-full">
+                {isSubmitting ? (
+                  <>
+                    <span className="size-4 animate-spin rounded-full border-2 border-current border-r-transparent" />
+                    Memverifikasi...
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="size-4" />
+                    Masuk ke workspace
+                  </>
+                )}
+              </Button>
+            </form>
 
-          {/* Footer info */}
-          <div className="mt-12 text-center lg:text-left text-[10px] text-slate-400 dark:text-slate-500 font-mono">
-            <p>© {new Date().getFullYear()} DIBERDAYAKAN oleh TIM ASET PAROKI</p>
-          </div>
+            <p className="mt-8 text-center text-xs text-muted-foreground">
+              © {new Date().getFullYear()} Diberdayakan oleh Tim Aset Paroki
+            </p>
           </CardContent>
         </Card>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

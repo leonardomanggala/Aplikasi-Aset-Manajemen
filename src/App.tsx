@@ -801,7 +801,6 @@ export default function App() {
       <Login 
         users={users} 
         onLoginSuccess={handleLoginSuccess}
-        isDarkMode={isDarkMode}
         appLogo={appLogo}
       />
     );

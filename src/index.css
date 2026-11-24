@@ -326,7 +326,8 @@ html.dark .min-h-screen {
 }
 
 #login-container {
-  background-color: #141418 !important;
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground));
 }
 
 /* Structural blocks */
