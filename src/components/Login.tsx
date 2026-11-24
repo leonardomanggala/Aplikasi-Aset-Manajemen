@@ -57,10 +57,10 @@ export default function Login({ users, onLoginSuccess, appLogo }: LoginProps) {
           src="/login-bg.jpg"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 z-10 h-full w-full object-cover dark:brightness-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
-        <div className="relative z-10 flex min-h-screen flex-col justify-between p-10 text-white xl:p-14">
+        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/65 via-black/10 to-transparent dark:from-black/45 dark:via-black/5" />
+        <div className="absolute inset-0 z-30 flex flex-col justify-between p-10 text-white xl:p-14">
           <div className="flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-xl border border-white/20 bg-white/10 p-2 backdrop-blur">
               <img src={logoSrc} alt="" className="h-full w-full object-contain" />
@@ -71,24 +71,26 @@ export default function Login({ users, onLoginSuccess, appLogo }: LoginProps) {
             </div>
           </div>
 
-          <div className="max-w-xl pb-6">
-            <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-white/75">
-              Paroki Pringwulung
-            </p>
-            <h1 className="text-4xl font-semibold leading-tight tracking-tight xl:text-5xl">
-              Penatausahaan Aset
-              <br />
-              Paroki Pringwulung
-            </h1>
-            <p className="mt-5 max-w-lg text-base leading-7 text-white/80">
-              Sistem informasi terpadu untuk pencatatan, pemantauan, dan pemeliharaan
-              inventaris Gereja Santo Yohanes Rasul.
+          <div className="space-y-6">
+            <div className="max-w-xl">
+              <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-white/75">
+                Paroki Pringwulung
+              </p>
+              <h1 className="text-4xl font-semibold leading-tight tracking-tight xl:text-5xl">
+                Penatausahaan Aset
+                <br />
+                Paroki Pringwulung
+              </h1>
+              <p className="mt-5 max-w-lg text-base leading-7 text-white/80">
+                Sistem informasi terpadu untuk pencatatan, pemantauan, dan pemeliharaan
+                inventaris Gereja Santo Yohanes Rasul.
+              </p>
+            </div>
+
+            <p className="text-xs text-white/60">
+              © {new Date().getFullYear()} Tim Aset Paroki
             </p>
           </div>
-
-          <p className="text-xs text-white/60">
-            © {new Date().getFullYear()} Tim Aset Paroki
-          </p>
         </div>
       </section>
 
